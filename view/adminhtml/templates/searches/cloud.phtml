@@ -1,0 +1,157 @@
+<?php
+/**
+ * Copyright (C) 2020 Licentia, Unipessoal LDA
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @title      Licentia Panda - Magento® Sales Automation Extension
+ * @package    Licentia
+ * @author     Bento Vilas Boas <bento@licentia.pt>
+ * @copyright  Copyright (c) Licentia - https://licentia.pt
+ * @license    GNU General Public License V3
+ * @modified   29/01/20, 15:22 GMT
+ *
+ */
+
+/** @var $block \Licentia\Reports\Block\Adminhtml\Searches\Cloud */
+
+/** @var $this \Magento\Framework\View\TemplateEngine\Php */
+
+$collection = $block->getTagCloud();
+
+?>
+<script type="text/javascript">
+
+    require(["jquery", 'domReady!'], function ($) {
+
+
+        (function ($) {
+            "use strict";
+            var compareWeights = function (a, b) {
+                return a - b;
+            };
+
+            // Converts hex to an RGB array
+            var toRGB = function (code) {
+                if (code.length === 4) {
+                    code = code.replace(/(\w)(\w)(\w)/gi, "\$1\$1\$2\$2\$3\$3");
+                }
+                var hex = /(\w{2})(\w{2})(\w{2})/.exec(code);
+                return [parseInt(hex[1], 16), parseInt(hex[2], 16), parseInt(hex[3], 16)];
+            };
+
+            // Converts an RGB array to hex
+            var toHex = function (ary) {
+                return "#" + jQuery.map(ary, function (i) {
+                    var hex = i.toString(16);
+                    hex = (hex.length === 1) ? "0" + hex : hex;
+                    return hex;
+                }).join("");
+            };
+
+            var colorIncrement = function (color, range) {
+                return jQuery.map(toRGB(color.end), function (n, i) {
+                    return (n - toRGB(color.start)[i]) / range;
+                });
+            };
+
+            var tagColor = function (color, increment, weighting) {
+                var rgb = jQuery.map(toRGB(color.start), function (n, i) {
+                    var ref = Math.round(n + (increment[i] * weighting));
+                    if (ref > 255) {
+                        ref = 255;
+                    } else {
+                        if (ref < 0) {
+                            ref = 0;
+                        }
+                    }
+                    return ref;
+                });
+                return toHex(rgb);
+            };
+
+            $.fn.tagcloud = function (options) {
+
+                var opts = $.extend({}, $.fn.tagcloud.defaults, options);
+                var tagWeights = this.map(function () {
+                    return $(this).attr("rel");
+                });
+                tagWeights = jQuery.makeArray(tagWeights).sort(compareWeights);
+                var lowest = tagWeights[0];
+                var highest = tagWeights.pop();
+                var range = highest - lowest;
+                if (range === 0) {
+                    range = 1;
+                }
+                // Sizes
+                var fontIncr, colorIncr;
+                if (opts.size) {
+                    fontIncr = (opts.size.end - opts.size.start) / range;
+                }
+                // Colors
+                if (opts.color) {
+                    colorIncr = colorIncrement(opts.color, range);
+                }
+                return this.each(function () {
+                    var weighting = $(this).attr("rel") - lowest;
+                    if (opts.size) {
+                        $(this).css({"font-size": opts.size.start + (weighting * fontIncr) + opts.size.unit});
+                    }
+                    if (opts.color) {
+                        $(this).css({"color": tagColor(opts.color, colorIncr, weighting)});
+                    }
+                });
+            };
+
+            $.fn.tagcloud.defaults = {
+                size: {start: 11, end: 38, unit: "px"},
+
+                color: {start: '#dff1cb', end: '#97000d'}
+
+            };
+
+        })(jQuery);
+
+        $("#tagcloud a").tagcloud();
+    });
+
+</script>
+<style type="text/css">
+    #tagcloud a:hover {
+        text-decoration: none;
+        color: darkgray;
+    }
+
+    #tagcloud a {
+        line-height: 1.85;
+        color: gray;
+        padding: 4px;
+        margin: 4px;
+    }
+</style>
+<div id="panda-stats admin__scope-old">
+    <div class="page-main-actions">
+        <div class="page-actions" style="float: left; width: 100%">
+            <div id="tagcloud">
+                <?php foreach ($collection as $value) : ?>
+                    <a rel="<?= $block->escapeHtmlAttr($value['weight']) ?>" target="_blank" href="<?= /* @noEscape */
+                    $block->getUrl(
+                        '*/*/index',
+                        ['query' => $value['text']]
+                    ) ?>"><?= $block->escapeHtml($value['text']) ?></a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>

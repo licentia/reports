@@ -1,0 +1,252 @@
+<?php
+/**
+ * Copyright (C) 2020 Licentia, Unipessoal LDA
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @title      Licentia Panda - Magento® Sales Automation Extension
+ * @package    Licentia
+ * @author     Bento Vilas Boas <bento@licentia.pt>
+ * @copyright  Copyright (c) Licentia - https://licentia.pt
+ * @license    GNU General Public License V3
+ * @modified   29/01/20, 15:22 GMT
+ *
+ */
+
+/** @var $block \Licentia\Reports\Block\Adminhtml\Relations\Recommendations */
+
+/** @var $this \Magento\Framework\View\TemplateEngine\Php */
+
+$countries = \Zend_Locale::getTranslationList('Territory');
+$collection = $block->getStatsArray();
+$skus = $block->getSKUs();
+
+$extraField = 'related';
+$extraFieldCount = 25;
+
+if ($block->getRequest()
+          ->getParam('after_order') == 1) {
+    $extraField = 'after_order';
+    $extraFieldCount = 10;
+}
+
+?>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script type="text/javascript">
+
+    require(["jquery", "jquery/ui", 'domReady!'], function ($) {
+
+        $("#asku").on('keypress', function (e) {
+            if (e.which === 13) {
+                window.location = '<?= $block->getUrl('*/*/*', ['_current' => true]) ?>sku/' + $(this).val();
+            }
+        }).autocomplete({
+            source: "<?= $block->getUrl('*/ajax/search') ?>",
+            minLength: 3,
+            select: function (event, ui) {
+                window.location = '<?= $block->getUrl('*/*/*', ['_current' => true]) ?>sku/' + ui.item.value;
+            }
+        });
+
+    });
+</script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div class="panda_autocomplete panda-stats">
+
+
+    <div class="page-main-actions">
+        <div class="page-actions" style="float: left;" data-ui-id="page-actions-toolbar-content-header">
+
+            <?php $skip = false;
+            $sku = $block->getRequest()->getParam('sku');
+            $sku = $block->getSKU() ? $block->getSKU() : false;
+            ?>
+            <div class="control"
+                 style="float: left; margin:0 10px; padding: 5px; ">
+                <input style="padding: 4px; width: 250px;" name="asku"
+                       value="<?= $block->escapeHtmlAttr($sku) ?>"
+                       id="asku" type="text" class="input text">
+                <br>
+                <small><em><?= /* @noEscape */
+                        __('Start typing to search for product...') ?></em></small>
+                <?php
+
+                echo $block->getProductName($block->getSKU()); ?>
+            </div>
+
+
+        </div>
+
+        <div style="float: right">
+            <button onclick="window.location='<?= /* @noEscape */
+            $block->getUrl(
+                '*/*/*',
+                [
+                    '_current'    => true,
+                    'after_order' => ($extraField == 'after_order') ? false : 1,
+                ]
+            ) ?>';"
+                    style="float: right;" title="Export" type="button" class="action-default scalable ">
+                <span><?= $block->escapeHtml(($extraField == 'after_order') ? __('Show All') : __('Show After Order')) ?></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
+        <?php foreach (\Licentia\Reports\Model\Products\Relations::REPORT_TYPES as $type): ?>
+
+            <?php
+
+            if (isset($collection[$type])):
+                foreach ($collection[$type] as $tmpData): ?>
+                    <?php foreach ($tmpData as $range => $data):
+
+                        if (!is_array($data)) {
+                            continue;
+                        }
+                        ?>
+
+                        <?php $data = array_filter($data); ?>
+
+                        <table class="data-grid" style="width: 47%; float: left; margin:1%;">
+                            <thead>
+                            <tr class="headings">
+                                <th class="data-grid-th "><?php
+
+                                    $typeTitle = __(ucwords($type));
+                                    $title = $typeTitle . " / " . $range;
+
+                                    if ($range === 0) {
+                                        $title = $typeTitle;
+                                    }
+
+                                    if ($type == 'countries' && isset($countries[$range])) {
+                                        $title = $typeTitle . ' / ' . $countries[$range];
+                                    }
+                                    echo $title; ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <?php
+
+                                    $json = [];
+                                    foreach (range(1, $extraFieldCount) as $indexKey) {
+
+                                        if (isset($data[$extraField . '_' . $indexKey])) {
+                                            $json[] = [
+                                                $block->getProductName(
+                                                    $data[$extraField . '_' . $indexKey]
+                                                ) . ' (' . $data[$extraField . '_' . $indexKey] . ')' . ' [' . (int) $data[$extraField . '_total_' . $indexKey] . ']',
+                                                (int) $data[$extraField . '_total_' . $indexKey],
+                                            ];
+                                        }
+                                    }
+                                    usort(
+                                        $json,
+                                        function ($a, $b) {
+
+                                            return $b[1] - $a[1];
+                                        }
+                                    );
+
+                                    array_unshift($json, ['Country', 'Total']);
+
+                                    $json = json_encode($json);
+
+                                    ?>
+
+                                    <script type="text/javascript">
+                                        //<![CDATA[
+
+                                        require(['jquery', 'domReady!'], function ($) {
+
+                                            google.charts.load('current', {'packages': ['corechart']});
+                                            google.charts.setOnLoadCallback(drawChart);
+
+
+                                            $(window).resize(function () {
+                                                var container = document.getElementById("chart_links<?= $type . $range ?>").firstChild.firstChild;
+                                                container.style.width = "100%";
+                                                drawChart();
+                                            });
+
+                                            function drawChart() {
+                                                var data = google.visualization.arrayToDataTable(<?= $json ?>);
+
+                                                var options = {
+                                                    tooltip: {trigger: 'selection', showColorCode: true},
+                                                    legend: {
+                                                        textStyle: {
+                                                            fontSize: 12
+                                                        }
+                                                    },
+                                                    backgroundColor: {fill: 'transparent'},
+                                                    chartArea: {
+                                                        height: 500,
+                                                        width: '100%'
+                                                    },
+                                                    width: $(window).width / 2,
+                                                    height: 500,
+                                                    is3D: true,
+                                                    colors: ['#83071B', '#870F21', '#8C1827',
+                                                        '#91212D', '#962A33', '#9B3239', '#A03B3F',
+                                                        '#A44445', '#A94D4B', '#AE5551', '#B35E57', '#B8675D',
+                                                        '#BD7063', '#C17869', '#C6816F',
+                                                        '#CB8A75', '#D0937B', '#D59B81',
+                                                        '#DAA487', '#DEAD8D', '#E3B693',
+                                                        '#E8BE99', '#EDC79F', '#F2D0A5',
+                                                        '#F7D9AB'
+                                                    ]
+                                                };
+
+                                                var chart = new google.visualization.PieChart(document.getElementById('chart_links<?= $type . $range ?>'));
+
+                                                chart.setAction({
+                                                    id: 'sample',
+                                                    text: 'Open Product',
+                                                    action: function () {
+                                                        window.open('<?= $block->getUrl(
+                                                            '*/*/*',
+                                                            [
+                                                                '_current' => true,
+                                                                'sku'      => false,
+                                                            ]
+                                                        ) ?>sku/' + data.getValue(chart.getSelection()[0].row, 0));
+                                                    }
+                                                });
+
+                                                chart.draw(data, options);
+                                            }
+
+                                        });
+
+                                        //]]>
+
+                                    </script>
+                                    <div id="chart_links<?= $type . $range ?>" style="width: 100%"></div>
+
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</div>

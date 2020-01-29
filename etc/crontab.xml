@@ -1,0 +1,55 @@
+<?xml version="1.0"?><!--
+  ~ Copyright (C) 2020 Licentia, Unipessoal LDA
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ @title      Licentia Panda - Magento® Sales Automation Extension
+  ~ @package    Licentia
+  ~ @author     Bento Vilas Boas <bento@licentia.pt>
+  ~ @copyright  Copyright (c) Licentia - https://licentia.pt
+  ~ @license    GNU General Public License V3
+  ~ @modified   29/01/20, 15:22 GMT
+  ~
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job name="panda_rebuild_sales_stats_yesterday" instance="Licentia\Reports\Cron\RebuildSalesStatsForYesterday" method="execute">
+            <schedule>30 4 * * *</schedule>
+        </job>
+        <job name="panda_build_prices_variation" instance="Licentia\Reports\Cron\PricesVariation" method="execute">
+            <schedule>10 1 * * *</schedule>
+        </job>
+        <job name="panda_indexer_rebuild_invalidated" instance="Licentia\Reports\Cron\IndexerStatus" method="execute">
+            <schedule>30 * * * *</schedule>
+        </job>
+        <job name="panda_products_recommendations" instance="Licentia\Reports\Cron\RebuildRecommendations" method="execute">
+            <schedule>0 6 1 * *</schedule>
+        </job>
+        <job name="panda_products_recommendations_yesterday" instance="Licentia\Reports\Cron\RebuildRecommendations" method="yesterday">
+            <schedule>2 5 * * *</schedule>
+        </job>
+        <job name="panda_rebuild_expected_sales" instance="Licentia\Reports\Cron\ExpectedReOrders" method="execute">
+            <schedule>20 2 * * *</schedule>
+        </job>
+        <job name="panda_rebuild_relations" instance="Licentia\Reports\Model\Products\Relations" method="rebuildAllTotals">
+            <schedule>30 1 1 * *</schedule>
+        </job>
+        <job name="panda_rebuild_relations_yesterday" instance="Licentia\Reports\Model\Products\Relations" method="rebuildAllForYesterday">
+            <schedule>30 1 1 * *</schedule>
+        </job>
+        <job name="panda_rebuild_search_history" instance="Licentia\Reports\Cron\SearchHistory" method="execute">
+            <schedule>20 4 * * *</schedule>
+        </job>
+    </group>
+</config>

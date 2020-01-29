@@ -1,0 +1,169 @@
+<?xml version="1.0"?><!--
+  ~ Copyright (C) 2020 Licentia, Unipessoal LDA
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ @title      Licentia Panda - Magento® Sales Automation Extension
+  ~ @package    Licentia
+  ~ @author     Bento Vilas Boas <bento@licentia.pt>
+  ~ @copyright  Copyright (c) Licentia - https://licentia.pt
+  ~ @license    GNU General Public License V3
+  ~ @modified   29/01/20, 15:22 GMT
+  ~
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Licentia\Reports\Api\PricesVariationsRepositoryInterface" type="Licentia\Reports\Model\PricesVariationsRepository"/>
+    <preference for="Licentia\Reports\Api\Data\PricesVariationsSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Licentia\Reports\Api\Data\PricesVariationsInterface" type="Licentia\Reports\Model\Sales\PricesVariation"/>
+
+    <preference for="Licentia\Reports\Api\RecommendationsRepositoryInterface" type="Licentia\Reports\Model\RecommendationsRepository"/>
+    <preference for="Licentia\Reports\Api\Data\RecommendationsInterface" type="Licentia\Reports\Model\Recommendations"/>
+
+    <type name="Magento\Search\Model\ResourceModel\Query">
+      <plugin name="panda_search_query_history" type="Licentia\Reports\Plugin\SearchHistory" sortOrder="1000"/>
+    </type>
+
+    <type name="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions">
+      <plugin name="panda_admin_product_actions" type="Licentia\Reports\Plugin\ProductActions" sortOrder="1000"/>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="panda_recommendations" xsi:type="object">Licentia\Reports\Console\Command\Recommendations</item>
+                <item name="panda_stats" xsi:type="object">Licentia\Reports\Console\Command\ProductsPerformance</item>
+                <item name="panda_expected_sales" xsi:type="object">Licentia\Reports\Console\Command\ExpectedReOrders</item>
+                <item name="panda_rebuild_relations" xsi:type="object">Licentia\Reports\Console\Command\Relations</item>
+                <item name="panda_rebuild_venn" xsi:type="object">Licentia\Reports\Console\Command\Venn</item>
+                <item name="panda_rebuild_sales_orders" xsi:type="object">Licentia\Reports\Console\Command\SalesOrders</item>
+                <item name="panda_rebuild_search" xsi:type="object">Licentia\Reports\Console\Command\SearchHistory</item>
+                <item name="panda_rebuild_stats_search" xsi:type="object">Licentia\Reports\Console\Command\SearchPerformance</item>
+                <item name="panda_rebuild_everything" xsi:type="object">Licentia\Reports\Console\Command\RebuildEverything</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="panda_expectedreorders_listing_data_source" xsi:type="string">Licentia\Reports\Model\ResourceModel\Sales\ExpectedReOrders\Grid\Collection</item>
+                <item name="panda_recommendations_listing_data_source" xsi:type="string">Licentia\Reports\Model\ResourceModel\Recommendations\Grid\Collection</item>
+                <item name="panda_search_listing_data_source" xsi:type="string">Licentia\Reports\Model\ResourceModel\Search\Grid\Collection</item>
+                <item name="panda_pricesvariation_listing_data_source" xsi:type="string">Licentia\Reports\Model\ResourceModel\Sales\PricesVariation\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+
+
+    <type name="Licentia\Reports\Model\ResourceModel\Search\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">panda_search_grid</argument>
+            <argument name="eventPrefix" xsi:type="string">panda_search_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">panda_search_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Licentia\Reports\Model\ResourceModel\Search</argument>
+        </arguments>
+    </type>
+    <virtualType name="pandaSearchGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pandaSearchGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Licentia\Reports\Model\ResourceModel\Search\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">pandaSearchGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+
+
+
+    <type name="Licentia\Reports\Model\ResourceModel\Sales\PricesVariation\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">panda_prices_variation</argument>
+            <argument name="eventPrefix" xsi:type="string">panda_pricesvariation_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">panda_pricesvariation_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Licentia\Reports\Model\ResourceModel\Sales\Pricesvariation</argument>
+        </arguments>
+    </type>
+    <virtualType name="pandaPricesvariationGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pandaPricesvariationGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Licentia\Reports\Model\ResourceModel\Sales\Pricesvariation\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">pandaPricesvariationGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+
+
+
+    <type name="Licentia\Reports\Model\ResourceModel\Recommendations\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">panda_products_recommendations_widget</argument>
+            <argument name="eventPrefix" xsi:type="string">panda_recommendations_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">panda_recommendations_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Licentia\Reports\Model\ResourceModel\Recommendations</argument>
+        </arguments>
+    </type>
+    <virtualType name="pandaRecommendationsGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pandaRecommendationsGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Licentia\Reports\Model\ResourceModel\Recommendations\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">pandaRecommendationsGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+
+
+
+    <type name="Licentia\Reports\Model\ResourceModel\Sales\ExpectedReOrders\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">panda_sales_expected_reorders</argument>
+            <argument name="eventPrefix" xsi:type="string">panda_sales_expectedreorders_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">panda_sales_expectedreorders_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Licentia\Reports\Model\ResourceModel\Sales\ExpectedReOrders</argument>
+        </arguments>
+    </type>
+    <virtualType name="pandaExpectedReOrdersGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pandaExpectedReOrdersGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Licentia\Reports\Model\ResourceModel\Sales\ExpectedReOrders\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">pandaSalesExpectedReOrdersGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+
+</config>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~ Copyright (C) 2020 Licentia, Unipessoal LDA
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ @title      Licentia Panda - Magento® Sales Automation Extension
+  ~ @package    Licentia
+  ~ @author     Bento Vilas Boas <bento@licentia.pt>
+  ~ @copyright  Copyright (c) Licentia - https://licentia.pt
+  ~ @license    GNU General Public License V3
+  ~ @modified   29/01/20, 15:22 GMT
+  ~
+  -->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">panda_search_listing.panda_search_listing_data_source</item>
+            <item name="deps" xsi:type="string">panda_search_listing.panda_search_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">panda_search_columns</item>
+        <item name="buttons" xsi:type="array">
+            <item name="add" xsi:type="array">
+                <item name="name" xsi:type="string">add</item>
+                <item name="label" xsi:type="string" translate="true">Chart View</item>
+                <item name="class" xsi:type="string">primary</item>
+                <item name="url" xsi:type="string">*/*/search</item>
+            </item>
+        </item>
+    </argument>
+    <dataSource name="panda_search_listing_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">pandaSearchGridDataProvider</argument>
+            <argument name="name" xsi:type="string">panda_search_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">item_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">item_id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <exportButton name="export_button"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="panda_search_columns">
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">0</item>
+                    <item name="indexField" xsi:type="string">term</item>
+                </item>
+            </argument>
+        </selectionsColumn>
+        <column name="term">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Term</item>
+                </item>
+            </argument>
+        </column>
+        <column name="today">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Today</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="today_1">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Yesterday</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="today_2">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">2D Ago</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="today_3">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">3D Ago</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="today_4">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">4D Ago</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="today_5">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">5D Ago</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="today_6">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">6D Ago</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="last_7days">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Last 7 Days</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="last_714days">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Last 7-14 days</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="last_1421days">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Last 14-21 days</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="last_2128days">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Last 21-28 days</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="last_30days">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Last 30 Days</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="last_3060days">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Last 30-60 Days</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="last_365days">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Last 365 Days</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="total">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Total</item>
+                    <item name="fieldClass" xsi:type="string">right</item>
+                </item>
+            </argument>
+        </column>
+    </columns>
+</listing>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?><!--
+  ~ Copyright (C) 2020 Licentia, Unipessoal LDA
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ @title      Licentia Panda - Magento® Sales Automation Extension
+  ~ @package    Licentia
+  ~ @author     Bento Vilas Boas <bento@licentia.pt>
+  ~ @copyright  Copyright (c) Licentia - https://licentia.pt
+  ~ @license    GNU General Public License V3
+  ~ @modified   29/01/20, 15:22 GMT
+  ~
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Licentia_Reports::recommendations" title="Product Recommendations" module="Licentia_Reports" sortOrder="110" parent="Licentia_Panda::email" action="pandar/recommendations" resource="Licentia_Reports::recommendations"/>
+
+        <add id="Licentia_Reports::report_sales" title="Panda Sales" module="Licentia_Reports" sortOrder="30" parent="Magento_Reports::report" resource="Licentia_Reports::reports"/>
+        <add id="Licentia_Reports::report_orders" title="Orders" module="Licentia_Reports" sortOrder="1005" parent="Licentia_Reports::report_sales" action="pandar/stats/orders" resource="Licentia_Reports::report_orders"/>
+        <add id="Licentia_Reports::expectedreorders" title="Expected Reorders" module="Licentia_Reports" sortOrder="1015" parent="Licentia_Reports::report_sales" action="pandar/expectedreorders" resource="Licentia_Reports::expectedreorders"/>
+        <add id="Licentia_Reports::prices_variation" title="Prices Variation" module="Licentia_Reports" sortOrder="1016" parent="Licentia_Reports::report_sales" action="pandar/pricesvariation" resource="Licentia_Reports::prices_variation"/>
+        <add id="Licentia_Reports::productsperformance" title="Product Performance" module="Licentia_Reports" sortOrder="1015" parent="Licentia_Reports::report_sales" action="pandar/stats" resource="Licentia_Reports::productsperformance"/>
+        <add id="Licentia_Reports::relations" title="Product Relations" module="Licentia_Reports" sortOrder="1015" parent="Licentia_Reports::report_sales" action="pandar/relations" resource="Licentia_Reports::relations"/>
+        <add id="Licentia_Reports::venn" title="Venn Relations" module="Licentia_Reports" sortOrder="1020" parent="Licentia_Reports::report_sales" action="pandar/relations/venn" resource="Licentia_Reports::venn"/>
+        <add id="Licentia_Reports::report_recommendations" title="Product Recommendations" module="Licentia_Reports" sortOrder="1030" parent="Licentia_Reports::report_sales" action="pandar/relations/recommendations" resource="Licentia_Reports::recommendations"/>
+
+
+
+        <add id="Licentia_Reports::indexer" title="Indexers" module="Licentia_Reports" sortOrder="60" parent="Licentia_Panda::account_details" action="pandar/indexer" resource="Licentia_Reports::indexer"/>
+
+        <add id="Licentia_Reports::searchcloud" title="Search Cloud" module="Licentia_Reports" sortOrder="2000" parent="Licentia_Reports::report_sales" action="pandar/searches/index/cloud/1" resource="Licentia_Reports::searchcloud"/>
+        <add id="Licentia_Reports::searchperformance" title="Search Performance" module="Licentia_Reports" sortOrder="2010" parent="Licentia_Reports::report_sales" action="pandar/searches/performance" resource="Licentia_Reports::searchperformance"/>
+        <add id="Licentia_Reports::searchvenn" title="Search Venn Relations" module="Licentia_Reports" sortOrder="2020" parent="Licentia_Reports::report_sales" action="pandar/searches/venn" resource="Licentia_Panda::searchvenn"/>
+        <add id="Licentia_Reports::search" title="Search History" module="Licentia_Reports" sortOrder="1040" parent="Licentia_Panda::report_main" action="pandar/search" resource="Licentia_Reports::search"/>
+
+        </menu>
+</config>

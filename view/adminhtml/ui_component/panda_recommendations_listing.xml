@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~ Copyright (C) 2020 Licentia, Unipessoal LDA
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ @title      Licentia Panda - Magento® Sales Automation Extension
+  ~ @package    Licentia
+  ~ @author     Bento Vilas Boas <bento@licentia.pt>
+  ~ @copyright  Copyright (c) Licentia - https://licentia.pt
+  ~ @license    GNU General Public License V3
+  ~ @modified   29/01/20, 15:22 GMT
+  ~
+  -->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">panda_recommendations_listing.panda_recommendations_listing_data_source</item>
+            <item name="deps" xsi:type="string">panda_recommendations_listing.panda_recommendations_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">panda_recommendations_columns</item>
+    </argument>
+    <dataSource name="panda_recommendations_listing_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">pandaRecommendationsGridDataProvider</argument>
+            <argument name="name" xsi:type="string">panda_recommendations_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">recommendation_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">recommendation_id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <exportButton name="export_button"/>
+    </listingToolbar>
+    <columns name="panda_recommendations_columns">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="childDefaults" xsi:type="array">
+                    <item name="fieldAction" xsi:type="array">
+                        <item name="provider" xsi:type="string">panda_recommendations_listing.panda_recommendations_listing.panda_recommendations_columns.actions</item>
+                        <item name="target" xsi:type="string">applyAction</item>
+                        <item name="params" xsi:type="array">
+                            <item name="0" xsi:type="string">edit</item>
+                            <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                        </item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">0</item>
+                    <item name="indexField" xsi:type="string">recommendation_id</item>
+                </item>
+            </argument>
+        </selectionsColumn>
+        <column name="entity_type" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Licentia\Reports\Model\Recommendations"/>
+                <dataType>select</dataType>
+                <label translate="true">Recommendation Source</label>
+            </settings>
+        </column>
+        <column name="internal_name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Internal Name</item>
+                </item>
+            </argument>
+        </column>
+        <column name="title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Title</item>
+                </item>
+            </argument>
+        </column>
+        <column name="code">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Code</item>
+                </item>
+            </argument>
+        </column>
+        <column name="based_on">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="array">
+                    <item name="current_product" xsi:type="array">
+                        <item name="value" xsi:type="string">current_product</item>
+                        <item name="label" xsi:type="string" translate="true">Current Product</item>
+                    </item>
+                    <item name="specific_product" xsi:type="array">
+                        <item name="value" xsi:type="string">specific_product</item>
+                        <item name="label" xsi:type="string" translate="true">Specific Product</item>
+                    </item>
+                    <item name="purchase_history" xsi:type="array">
+                        <item name="value" xsi:type="string">purchase_history</item>
+                        <item name="label" xsi:type="string" translate="true">Purchase History</item>
+                    </item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="editor" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Based On</item>
+                </item>
+            </argument>
+        </column>
+        <column name="level">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="array">
+                    <item name="related" xsi:type="array">
+                        <item name="value" xsi:type="string">related</item>
+                        <item name="label" xsi:type="string" translate="true">Directly Related</item>
+                    </item>
+                    <item name="after_order" xsi:type="array">
+                        <item name="value" xsi:type="string">after_order</item>
+                        <item name="label" xsi:type="string" translate="true">Directly Related only after Order</item>
+                    </item>
+                    <item name="second_level" xsi:type="array">
+                        <item name="value" xsi:type="string">second_level</item>
+                        <item name="label" xsi:type="string" translate="true">Second Level Recommendation</item>
+                    </item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="editor" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Level</item>
+                </item>
+            </argument>
+        </column>
+        <column name="skus">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Skus</item>
+                </item>
+            </argument>
+        </column>
+        <column name="segment_drill">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="array">
+                    <item name="ignore" xsi:type="array">
+                        <item name="value" xsi:type="string">ignore</item>
+                        <item name="label" xsi:type="string" translate="true">Ignore/Global</item>
+                    </item>
+                    <item name="age" xsi:type="array">
+                        <item name="value" xsi:type="string">age</item>
+                        <item name="label" xsi:type="string" translate="true">Age</item>
+                    </item>
+                    <item name="gender" xsi:type="array">
+                        <item name="value" xsi:type="string">gender</item>
+                        <item name="label" xsi:type="string" translate="true">Gender</item>
+                    </item>
+                    <item name="country" xsi:type="array">
+                        <item name="value" xsi:type="string">country</item>
+                        <item name="label" xsi:type="string" translate="true">Country</item>
+                    </item>
+                    <item name="region" xsi:type="array">
+                        <item name="value" xsi:type="string">region</item>
+                        <item name="label" xsi:type="string" translate="true">Region</item>
+                    </item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="editor" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Recommend Based On</item>
+                </item>
+            </argument>
+        </column>
+        <column name="number_products">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Number Products</item>
+                </item>
+            </argument>
+        </column>
+         <column name="sort_results">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="array">
+                    <item name="created_at" xsi:type="array">
+                        <item name="value" xsi:type="string">created_at</item>
+                        <item name="label" xsi:type="string" translate="true">Most Recent</item>
+                    </item>
+                    <item name="random" xsi:type="array">
+                        <item name="value" xsi:type="string">random</item>
+                        <item name="label" xsi:type="string" translate="true">Randomly</item>
+                    </item>
+                    <item name="price_asc" xsi:type="array">
+                        <item name="value" xsi:type="string">price_asc</item>
+                        <item name="label" xsi:type="string" translate="true">Price ASC</item>
+                    </item>
+                    <item name="price_desc" xsi:type="array">
+                        <item name="value" xsi:type="string">price_desc</item>
+                        <item name="label" xsi:type="string" translate="true">Price Desc</item>
+                    </item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">Sort By</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                </item>
+            </argument>
+        </column>
+        <column name="if_fail">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="array">
+                    <item name="views" xsi:type="array">
+                        <item name="value" xsi:type="string">views</item>
+                        <item name="label" xsi:type="string" translate="true">Most Viewed</item>
+                    </item>
+                    <item name="recent" xsi:type="array">
+                        <item name="value" xsi:type="string">recent</item>
+                        <item name="label" xsi:type="string" translate="true">New</item>
+                    </item>
+                    <item name="category" xsi:type="array">
+                        <item name="value" xsi:type="string">category</item>
+                        <item name="label" xsi:type="string" translate="true">Category</item>
+                    </item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">If No Results</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                </item>
+            </argument>
+        </column>
+        <column name="is_active" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Active</label>
+            </settings>
+        </column>
+        <column name="use_segments" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Use Segments</label>
+            </settings>
+        </column>
+        <column name="from_date" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Start Date</label>
+                <sorting>desc</sorting>
+                <timezone>false</timezone>
+                <dateFormat>MMM dd, YYYY</dateFormat>
+                <fieldClass>
+                    <class name="column_120">true</class>
+                    <class name="right">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <column name="to_date" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">End Date</label>
+                <sorting>desc</sorting>
+                <timezone>false</timezone>
+                <dateFormat>MMM dd, YYYY</dateFormat>
+                <fieldClass>
+                    <class name="column_120">true</class>
+                    <class name="right">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="Licentia\Reports\Ui\Component\Listing\Column\RecommendationsActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">id</item>
+                </item>
+            </argument>
+        </actionsColumn>
+    </columns>
+</listing>

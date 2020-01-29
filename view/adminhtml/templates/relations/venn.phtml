@@ -1,0 +1,475 @@
+<?php
+/**
+ * Copyright (C) 2020 Licentia, Unipessoal LDA
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * @title      Licentia Panda - Magento® Sales Automation Extension
+ * @package    Licentia
+ * @author     Bento Vilas Boas <bento@licentia.pt>
+ * @copyright  Copyright (c) Licentia - https://licentia.pt
+ * @license    GNU General Public License V3
+ * @modified   29/01/20, 15:22 GMT
+ *
+ */
+
+/** @var $block \Licentia\Reports\Block\Adminhtml\Relations\Venn */
+/** @var $this \Magento\Framework\View\TemplateEngine\Php */
+
+$vennInfo = $block->getVennData();
+
+$countries = \Zend_Locale::getTranslationList('Territory');
+$venn = $vennInfo['data'];
+$skus = $vennInfo['skus'];
+$executionTime = isset($vennInfo['execution']) ? $vennInfo['execution'] : '';
+
+$segments = $block->getSegmentsList();
+
+$countriesList = $block->getPossibleCountries();
+$regions = $block->getPossibleRegions();
+
+foreach ($countriesList as $t => $key) {
+    unset($countriesList[$t]);
+    $countriesList[$key] = $countries[$key];
+}
+asort($countriesList);
+ksort($venn);
+ksort($skus);
+
+$skuNames = $block->getSkuNames($skus);
+
+?>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script type="text/javascript">
+
+    require(["jquery", "jquery/ui", 'domReady!'], function ($) {
+        for (i = 1; i <= 5; i++) {
+            $("#asku" + i).on('keypress', function (e) {
+                if (e.which === 13) {
+                    window.location = '<?= $block->getUrl(
+                        '*/*/*',
+                        ['_current' => true]
+                    ) ?>sku' + $(this).attr('data-index') + '/' + $(this).val();
+                }
+            });
+            <?php if($block->isAttributes()): ?>
+            $("#asku" + i).on('change', function (e) {
+                window.location = '<?= $block->getUrl(
+                    '*/*/*',
+                    ['_current' => true]
+                ) ?>sku' + $(this).attr('data-index') + '/' + $(this).val();
+            });
+            <?php else: ?>
+            $("#asku" + i).on('keypress', function (e) {
+                if (e.which === 13) {
+                    window.location = '<?= $block->getUrl(
+                        '*/*/*',
+                        ['_current' => true]
+                    ) ?>sku' + $(this).attr('data-index') + '/' + $(this).val();
+                }
+            });
+            <?php endif; ?>
+            $("#asku" + i).autocomplete({
+                source: "<?= $block->getUrl('*/ajax/search') ?>",
+                minLength: 3,
+                select: function (event, ui) {
+                    window.location = '<?= $block->getUrl(
+                        '*/*/*',
+                        ['_current' => true]
+                    ) ?>sku' + $(this).attr('data-index') + '/' + ui.item.value;
+                }
+            });
+        }
+    });
+</script>
+<style>
+    .venntooltip {
+        position: absolute;
+        text-align: center;
+        width: 128px;
+        background: #333;
+        color: #ddd;
+        padding: 2px;
+        border: 0;
+        border-radius: 8px;
+        opacity: 0;
+    }
+
+    .data-grid td div {
+        min-height: 70px;
+    }
+
+    .data-grid td div span {
+        float: left;
+        display: inline-block;
+        background-color: antiquewhite;
+        padding: 4px 7px;
+        margin: 2px;
+        border: 1px solid #676056;
+    }
+
+    .page-main-actions select {
+        max-width: 180px;
+    }
+</style>
+
+
+<?php
+
+$sets = [];
+
+foreach (\Licentia\Reports\Model\Products\Relations::REPORT_TYPES as $type) {
+
+    if (isset($venn[$type])) {
+
+        foreach ($venn[$type] as $key => $value) {
+
+            foreach ($value as $tkey => $item) {
+
+                if ((int) $item == 0) {
+                    continue;
+                }
+
+                $setInfo = explode(Licentia\Reports\Model\Products\Relations::SKU_SEPARATOR, $tkey);
+                $sets[$type][$key][] = [
+                    'sets'  => $setInfo,
+                    'size'  => (int) $item,
+                    'label' => count($setInfo) == 1 ? $block->getSkuNames($skus)[$setInfo[0]] : false,
+                ];
+            }
+
+        }
+
+    }
+
+}
+
+?>
+
+<style type="text/css">
+    select {
+        font: 400 12px/1.3 "Helvetica Neue", sans-serif;
+        -webkit-appearance: none;
+        appearance: none;
+        border: 1px solid #303030;
+        line-height: 1;
+        outline: 0;
+        color: #303030;
+        border-color: #303030;
+        padding: 0.65em 2.5em 0.55em 0.75em;
+        border-radius: 3px;
+        background: linear-gradient(#303030, #303030) no-repeat,
+        linear-gradient(-135deg, rgba(255, 255, 255, 0) 50%, white 50%) no-repeat,
+        linear-gradient(-225deg, rgba(255, 255, 255, 0) 50%, white 50%) no-repeat,
+        linear-gradient(#303030, #303030) no-repeat;
+        background-color: white;
+        background-size: 1px 100%, 20px 20px, 20px 20px, 20px 60%;
+        background-position: right 20px center, right bottom, right bottom, right bottom;
+    }
+</style>
+<script type="text/javascript">
+    require(['d3', 'venn', 'd3-selection', 'd3-transition', 'd3-dispatch', 'd3-timer', 'd3-interpolate', 'd3-color', 'd3-ease'],
+        function (d3, venn, selection, transition, dispatch, timer, interpolate, color, ease) {
+
+            <?php foreach (\Licentia\Reports\Model\Products\Relations::REPORT_TYPES as $type):?>
+            <?php if (isset($sets[$type])) : ?>
+            <?php foreach ($sets[$type] as $key=>$set): ?>
+            <?php
+
+            $id = preg_replace('/\W/', '_', $type . '_' . $key) ?>
+
+            var sets<?= $id; ?> = <?=  json_encode($set); ?>;
+
+            var chart<?= $id; ?> = venn.VennDiagram()
+                .width(550)
+                .height(500);
+
+            var div<?= $id; ?> = d3.select("#venn<?= $id; ?>");
+            div<?= $id; ?>.datum(sets<?= $id; ?>).call(chart<?= $id; ?>);
+
+            var tooltip<?= $id; ?> = d3.select("body").append("div")
+                .attr("class", "venntooltip");
+
+            div<?= $id; ?>.selectAll("path")
+                .style("stroke-opacity", 0)
+                .style("stroke", "#fff")
+                .style("stroke-width", 3);
+
+            div<?= $id; ?>.selectAll("g")
+                .on("mouseover", function (d, i) {
+                    venn.sortAreas(div<?= $id; ?>, d);
+                    tooltip<?= $id; ?>.transition().duration(400).style("opacity", .9);
+                    tooltip<?= $id; ?>.text(d.size + " purchases");
+                    var selection = d3.select(this).transition("tooltip").duration(400);
+                    selection.select("path")
+                        .style("fill-opacity", d.sets.length == 1 ? .4 : .1)
+                        .style("stroke-opacity", 1);
+                })
+                .on("mousemove", function () {
+                    tooltip<?= $id; ?>.style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
+                })
+                .on("mouseout", function (d, i) {
+                    tooltip<?= $id; ?>.transition().duration(400).style("opacity", 0);
+                    var selection = d3.select(this).transition("tooltip").duration(400);
+                    selection.select("path")
+                        .style("fill-opacity", d.sets.length == 1 ? .25 : .0)
+                        .style("stroke-opacity", 0);
+                });
+
+            <?php endforeach; ?>
+            <?php endif; ?>
+            <?php endforeach; ?>
+        });
+</script>
+<div class="panda_autocomplete panda-stats">
+
+    <div class="page-main-actions">
+        <div class="page-actions" style="float: left;" data-ui-id="page-actions-toolbar-content-header">
+
+            <?php if ($block->isAttributes()): ?>
+                <div style="float: left; padding:0 10px;">
+                    <select onchange="window.location='<?= /* @noEscape */
+                    $block->getUrl(
+                        '*/*/*',
+                        [
+                            'attributes' => 1,
+                            'attribute'  => false,
+                        ]
+                    ) ?>attribute/'+this.value;"
+                            name="segment_id">
+                        <option value="">--<?= __('Choose Attribute') ?>--</option>
+                        <?php foreach ($block->getPossibleAttributes() as $key => $value): ?>
+                            <option <?php if ($key == $block->getAttribute()) {
+                                echo " selected='selected' ";
+                            } ?> value="<?= $block->escapeHtmlAttr($key) ?>"><?= $block->escapeHtml($value) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            <?php endif; ?>
+            <?php $skip = false;
+            if (!$block->isAttributes()):
+                for ($i = 1; $i <= 5; $i++):
+                    $sku = $block->getRequest()->getParam('sku' . $i);
+                    $sku = isset($block->getSKUs()[$sku]) ? $block->getSKUs()[$sku] : false;
+
+                    if ($skip && !$sku) {
+                        continue;
+                    }
+                    if (!$sku) {
+                        $skip = true;
+                    } ?>
+                    <div class="control" style="float: left;  padding:0 10px; ">
+                        <div style="float:left; padding: 6px;">
+                            <strong><?= $block->escapeHtml(isset($nCodes[$sku]) ? $nCodes[$sku] : '') ?></strong>
+                        </div>
+                        <input style="padding: 4px; width: 250px;" name="asku<?= $i; ?>"
+                               value="<?= $block->escapeHtmlAttr($sku) ?>"
+                               id="asku<?= $i; ?>" data-index="<?= $block->escapeHtmlAttr($i) ?>" type="text"
+                               class="input text">
+                        <?php if ($sku): ?>
+                            <a href="<?= /* @noEscape */
+                            $block->getUrl('*/*/*',
+                                ['_current' => true, 'sku' . $i => false]) ?>"
+                               style="padding: 1px 6px; border: 2px solid darkred; border-radius: 8px; background-color: whitesmoke;
+                                font-size: 17px; line-height: 9px; color: #2b0000; font-weight: bolder;">X </a>
+                            <div style="padding: 5px 0 0 15px;"><?= $block->escapeHtml($block->getProduct($sku)) ?></div>
+                        <?php else: ?>
+                            <div style="padding: 5px 0 0 15px;">
+                                <small><em><?= /* @noEscape */
+                                        __('Start typing to search for product...') ?></em>
+                                </small>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endfor; ?>
+            <?php else:
+
+                for ($i = 1; $i <= 5; $i++):
+                    $sku = $block->getRequest()->getParam('sku' . $i);
+                    $sku = isset($block->getSKUs()[$sku]) ? $block->getSKUs()[$sku] : false;
+
+                    if ($skip && !$sku) {
+                        continue;
+                    }
+                    if (!$sku) {
+                        $skip = true;
+                    } ?>
+                    <div class="control"
+                         style="float: left; padding:0 10px; ">
+                        <div style="float:left; padding: 6px;">
+                            <strong><?= $block->escapeHtml(isset($nCodes[$sku]) ? $nCodes[$sku] : '') ?></strong>
+                        </div>
+
+                        <select name="asku<?= /* @noEscape */
+                        $i; ?>" id="asku<?= /* @noEscape */
+                        $i; ?>" data-index="<?= $block->escapeHtmlAttr($i) ?>">
+                            <option value="">--Select Attribute Value--</option>
+                            <?php foreach ($block->getPossibleAttributesValues() as $key => $value): ?>
+                                <option <?php if ($sku && $key == $sku) {
+                                    echo " selected='selected' ";
+                                } ?> value="<?= $block->escapeHtmlAttr($key) ?>"><?= $block->escapeHtml($value) ?></option>
+
+                            <?php endforeach; ?>
+
+                        </select>
+                    </div>
+                <?php endfor; ?>
+
+            <?php endif; ?>
+
+        </div>
+    </div>
+    <div class="page-main-actions">
+        <div class="page-actions" style="float: right;" data-ui-id="page-actions-toolbar-content-header">
+
+            <div style="float: right">
+
+                <div style="float: left; padding:0 10px;">Show:
+                    <select onchange="window.location='<?= /* @noEscape */
+                    $block->getUrl(
+                        '*/*/*',
+                        ['attributes' => false]
+                    ) ?>attributes/'+this.value;"
+                            name="attributes">
+                        <option <?php if ($block->isAttributes()) {
+                            echo " selected='selected' ";
+                        } ?> value="1"><?= /* @noEscape */
+                            __('Attributes') ?></option>
+                        <option <?php if (!$block->isAttributes()) {
+                            echo " selected='selected' ";
+                        } ?> value="0"><?= /* @noEscape */
+                            __('Products') ?></option>
+                    </select>
+                </div>
+
+                <?php if (count($segments)): ?>
+                    <div style="float: left; padding:0 10px;">
+                        <select onchange="window.location='<?= /* @noEscape */
+                        $block->getUrl(
+                            '*/*/*',
+                            [
+                                '_current'   => true,
+                                'segment_id' => false,
+                            ]
+                        ) ?>segment_id/'+this.value;"
+                                name="segment_id">
+                            <option value="">--<?= __('Filter by Segment') ?>--</option>
+                            <?php foreach ($segments as $segment): ?>
+                                <option <?php if ($segment->getId() == $block->getSegmentId()) {
+                                    echo " selected='selected' ";
+                                } ?> value="<?= $block->escapeHtmlAttr($segment->getId()) ?>"><?= $block->escapeHtml($segment->getName()) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
+
+
+                <?php if (count($countriesList)): ?>
+                    <div style="float: left; padding:0 10px;">
+                        <select onchange="window.location='<?= /* @noEscape */
+                        $block->getUrl(
+                            '*/*/*',
+                            [
+                                '_current' => true,
+                                'region'   => false,
+                                'country'  => false,
+                            ]
+                        ) ?>country/'+this.value;"
+                                name="country">
+                            <option value="">--<?= __('Filter by Country') ?>--</option>
+                            <?php foreach ($countriesList as $key => $value): ?>
+                                <option <?php if ($key == $block->getCountry()) {
+                                    echo " selected='selected' ";
+                                } ?> value="<?= $block->escapeHtmlAttr($key) ?>"><?= $block->escapeHtml($value) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
+
+
+                <?php if (count($regions)): ?>
+                    <div style="float: left; padding:0 10px;">
+                        <select onchange="window.location='<?= /* @noEscape */
+                        $block->getUrl(
+                            '*/*/*',
+                            [
+                                '_current' => 'true',
+                                'country'  => false,
+                                'region'   => false,
+                            ]
+                        ) ?>region/'+this.value;"
+                                name="region">
+                            <option value="">--<?= __('Filter by Region') ?>--</option>
+                            <?php foreach ($regions as $value): ?>
+                                <option <?php if ($value == $block->getRegion()) {
+                                    echo " selected='selected' ";
+                                } ?> value="<?= $block->escapeHtmlAttr($value) ?>"><?= $block->escapeHtml($value) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                <?php endif; ?>
+
+                <div style="clear: left"></div>
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <?php foreach (\Licentia\Reports\Model\Products\Relations::REPORT_TYPES as $type): ?>
+            <?php if (isset($sets[$type])) : ?>
+                <?php foreach ($sets[$type] as $key => $set): ?>
+                    <?php $id = preg_replace('/\W/', '_', $type . '_' . $key) ?>
+                    <table class="data-grid" style="float: left; width: 45%; margin: 1% ;">
+                        <thead>
+                        <tr>
+                            <th class="data-grid-th " style="text-align: center;"><?php
+
+                                $typeTitle = __(ucwords($type));
+                                $title = $typeTitle . " / " . $key;
+
+                                if ($key === 0) {
+                                    $title = $typeTitle;
+                                }
+
+                                if ($type == 'countries' && isset($countries[$key])) {
+                                    $title = $typeTitle . ' / ' . $countries[$key];
+                                }
+                                echo $title; ?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align: center">
+                                <div id="venn<?= $id; ?>"></div>
+                                <div>
+                                    <?php
+
+                                    foreach ($set as $tmpData) {
+                                        if (count($tmpData['sets']) == 1) {
+                                            echo "<span>" . $tmpData['label'] . ' (' . $tmpData['size'] . ')</span>';
+                                        }
+
+                                    }
+                                    ?>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                <?php endforeach;
+            endif;
+        endforeach; ?>
+    </div>
+</div>

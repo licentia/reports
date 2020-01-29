@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~ Copyright (C) 2020 Licentia, Unipessoal LDA
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ @title      Licentia Panda - Magento® Sales Automation Extension
+  ~ @package    Licentia
+  ~ @author     Bento Vilas Boas <bento@licentia.pt>
+  ~ @copyright  Copyright (c) Licentia - https://licentia.pt
+  ~ @license    GNU General Public License V3
+  ~ @modified   29/01/20, 15:22 GMT
+  ~
+  -->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">panda_pricesvariation_listing.panda_pricesvariation_listing_data_source</item>
+            <item name="deps" xsi:type="string">panda_pricesvariation_listing.panda_pricesvariation_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">panda_pricesvariation_columns</item>
+        <item name="buttons" xsi:type="array">
+            <item name="add" xsi:type="array">
+                <item name="name" xsi:type="string">map</item>
+                <item name="label" xsi:type="string" translate="true">Map Customer Groups</item>
+                <item name="url" xsi:type="string">*/PricesVariationsGroups/index</item>
+            </item>
+        </item>
+    </argument>
+    <dataSource name="panda_pricesvariation_listing_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">pandaPricesvariationGridDataProvider</argument>
+            <argument name="name" xsi:type="string">panda_pricesvariation_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">item_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">item_id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <exportButton name="export_button"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="panda_pricesvariation_columns">
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">0</item>
+                    <item name="indexField" xsi:type="string">item_id</item>
+                </item>
+            </argument>
+        </selectionsColumn>
+        <column name="group_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">\Licentia\Reports\Model\Source\PricesVariationsGroups</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Variation Group</item>
+                </item>
+            </argument>
+        </column>
+        <column name="sku">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">SKU</item>
+                </item>
+            </argument>
+        </column>
+        <column name="name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Name</item>
+                </item>
+            </argument>
+        </column>
+        <column name="price" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Base Price</item>
+                    <item name="fieldClass" xsi:type="string">column_150 right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="qty" class="Licentia\Panda\Ui\Component\Listing\Column\Number">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Qty sold at price</item>
+                    <item name="fieldClass" xsi:type="string">column_150 right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="deviation" class="Licentia\Panda\Ui\Component\Listing\Column\Number">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Deviation</item>
+                    <item name="fieldClass" xsi:type="string">column_120 right</item>
+                </item>
+            </argument>
+        </column>
+        <column name="first_sale_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">First Sale At</label>
+                <sorting>desc</sorting>
+                <timezone>false</timezone>
+                <dateFormat>MMM dd, YYYY</dateFormat>
+                <fieldClass>
+                    <class name="column_120">true</class>
+                    <class name="right">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <column name="last_sale_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Last Sale At</label>
+                <sorting>desc</sorting>
+                <timezone>false</timezone>
+                <dateFormat>MMM dd, YYYY</dateFormat>
+                <fieldClass>
+                    <class name="column_120">true</class>
+                    <class name="right">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+    </columns>
+</listing>
