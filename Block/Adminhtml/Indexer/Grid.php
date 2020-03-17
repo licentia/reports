@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   17/03/20, 20:47 GMT
  *
  */
 
@@ -120,8 +120,20 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Indexer ID'),
                 'index'  => 'indexer_id',
+                'sortable'       => false,
             ]
         );
+        $this->addColumn(
+            'desc',
+            [
+                'header'         => __('Description'),
+                'index'          => 'indexer_id',
+                'sortable'       => false,
+                'frame_callback' => [$this, 'descResult'],
+                'is_system'      => true,
+            ]
+        );
+
 
         $this->addColumn(
             'updated_at',
@@ -135,16 +147,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'entity_type',
             [
-                'header' => __('Entity Type'),
-                'index'  => 'entity_type',
+                'header'   => __('Entity Type'),
+                'index'    => 'entity_type',
+                'sortable' => false,
             ]
         );
 
         $this->addColumn(
             'last_entity_id',
             [
-                'header' => __('Last Entity ID'),
-                'index'  => 'last_entity_id',
+                'header'   => __('Last Entity ID'),
+                'index'    => 'last_entity_id',
+                'sortable' => false,
             ]
         );
 
@@ -162,9 +176,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header'         => __('Status'),
                 'index'          => 'status',
+                'sortable'       => false,
                 'frame_callback' => [$this, 'serviceResult'],
             ]
         );
+
         $this->addColumn(
             'customer_id',
             [
@@ -172,7 +188,20 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'align'          => 'center',
                 'width'          => '50px',
                 'index'          => 'indexer_id',
+                'sortable'       => false,
                 'frame_callback' => [$this, 'customerResult'],
+                'is_system'      => true,
+            ]
+        );
+
+        $this->addColumn(
+            'info',
+            [
+                'header'         => __('Info'),
+                'width'          => '50px',
+                'index'          => 'indexer_id',
+                'sortable'       => false,
+                'frame_callback' => [$this, 'infoResult'],
                 'is_system'      => true,
             ]
         );
@@ -202,6 +231,100 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         }
 
         return '';
+    }
+
+    /**
+     * @param $value
+     * @param $row
+     *
+     * @return string
+     */
+    public function infoResult($value, $row)
+    {
+
+        switch ($value) {
+            CASE 'equity':
+                return __('Real-time update / mannually update');
+                break;
+            CASE 'sales':
+                return __('Daily update @3:40am');
+                break;
+            CASE 'reorders':
+                return __('Daily update @2:20am');
+                break;
+            CASE 'search_history':
+                return __('Daily update @4:20am');
+                break;
+            CASE 'relations':
+            CASE 'performance':
+                return __('Daily udate for previous day @1:30am<br>FULL rebuild every monday @1:30am');
+                break;
+            CASE 'recommendations':
+                return __('Daily udate for previous day @1:30am<br>FULL rebuild every monday @6:00am');
+                break;
+            CASE 'search_performance':
+                return __('FULL rebuild every monday @2:20am');
+                break;
+            CASE 'venn':
+                return __('FULL rebuild every monday @3:20am');
+                break;
+            CASE 'segments':
+                return __('Per-Segment option / mannually update');
+                break;
+
+            default:
+                return '';
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param $value
+     * @param $row
+     *
+     * @return string
+     */
+    public function descResult($value, $row)
+    {
+
+        switch ($value) {
+            CASE 'equity':
+                return __('Customer equity values (number order, amounts, etc.)');
+                break;
+            CASE 'sales':
+                return __('Sales analytics');
+                break;
+            CASE 'reorders':
+                return __('Expected Reorders');
+                break;
+            CASE 'search_history':
+                return __('Search History Data');
+                break;
+            CASE 'relations':
+                return __('Product metadata for Recommendations');
+                break;
+            CASE 'performance':
+                return __('Product Sales Performance');
+                break;
+            CASE 'recommendations':
+                return __('Product Recommendation Metadata');
+                break;
+            CASE 'search_performance':
+                return __('Search matadata');
+                break;
+            CASE 'venn':
+                return __('Venn Analytics');
+                break;
+            CASE 'segments':
+                return __('Customer Segments');
+                break;
+
+            default:
+                return '';
+        }
+
+        return $value;
     }
 
     /**

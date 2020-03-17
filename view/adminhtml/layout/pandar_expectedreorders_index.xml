@@ -19,13 +19,14 @@
   ~ @author     Bento Vilas Boas <bento@licentia.pt>
   ~ @copyright  Copyright (c) Licentia - https://licentia.pt
   ~ @license    GNU General Public License V3
-  ~ @modified   29/01/20, 15:22 GMT
+  ~ @modified   17/03/20, 20:16 GMT
   ~
   -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="formkey"/>
     <body>
         <referenceContainer name="content">
+            <block name="panda.help.variations" class="Magento\Framework\View\Element\Template" template="Licentia_Reports::stats/reorders.phtml"/>
             <uiComponent name="panda_expectedreorders_listing"/>
         </referenceContainer>
     </body>

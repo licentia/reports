@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   17/03/20, 20:16 GMT
  *
  */
 
@@ -62,7 +62,19 @@ if ($group != 'single') {
 
 $result = $select->getConnection()->fetchAll($select);
 
+/** @var Licentia\Reports\Helper\Data $update */
+$update = $this->helper('Licentia\Reports\Helper\Data')->getRebuildDateforIndexer('sales');
 ?>
+
+<div id="messages">
+    <div class="messages">
+        <div class="message message-warning warning">
+            <div data-ui-id="messages-message-warning">
+                <strong><?= __('Last Update') ?>: </strong> <?= $update ?>. <?= __('Check the <a target="_blank" href="%1">Indexer</a> status for more info about stats updates',$block->getUrl('*/indexer')) ?>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style type="text/css">
     select {
@@ -85,6 +97,7 @@ $result = $select->getConnection()->fetchAll($select);
         background-position: right 20px center, right bottom, right bottom, right bottom;
     }
 </style>
+
 <div class="panda-stats">
 
     <div class="page-main-actions">

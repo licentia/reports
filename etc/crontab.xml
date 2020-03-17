@@ -19,7 +19,7 @@
   ~ @author     Bento Vilas Boas <bento@licentia.pt>
   ~ @copyright  Copyright (c) Licentia - https://licentia.pt
   ~ @license    GNU General Public License V3
-  ~ @modified   29/01/20, 15:22 GMT
+  ~ @modified   17/03/20, 20:42 GMT
   ~
   -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
@@ -46,10 +46,16 @@
             <schedule>30 1 1 * *</schedule>
         </job>
         <job name="panda_rebuild_relations_yesterday" instance="Licentia\Reports\Model\Products\Relations" method="rebuildAllForYesterday">
-            <schedule>30 1 1 * *</schedule>
+            <schedule>30 1 * * *</schedule>
         </job>
         <job name="panda_rebuild_search_history" instance="Licentia\Reports\Cron\SearchHistory" method="execute">
             <schedule>20 4 * * *</schedule>
+        </job>
+        <job name="panda_rebuild_search_performance" instance="Licentia\Reports\Cron\SearchPerformance" method="execute">
+            <schedule>20 2 1 * *</schedule>
+        </job>
+        <job name="panda_rebuild_venn" instance="Licentia\Reports\Cron\RebuildVenn" method="execute">
+            <schedule>20 3 1 * *</schedule>
         </job>
     </group>
 </config>
