@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   17/03/20, 20:47 GMT
+ * @modified   18/03/20, 05:34 GMT
  *
  */
 
@@ -118,9 +118,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'indexer_id',
             [
-                'header' => __('Indexer ID'),
-                'index'  => 'indexer_id',
-                'sortable'       => false,
+                'header'   => __('Indexer ID'),
+                'index'    => 'indexer_id',
+                'sortable' => false,
             ]
         );
         $this->addColumn(
@@ -133,7 +133,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'is_system'      => true,
             ]
         );
-
 
         $this->addColumn(
             'updated_at',
@@ -152,25 +151,25 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'sortable' => false,
             ]
         );
+        /*
+                $this->addColumn(
+                    'last_entity_id',
+                    [
+                        'header'   => __('Last Entity ID'),
+                        'index'    => 'last_entity_id',
+                        'sortable' => false,
+                    ]
+                );
 
-        $this->addColumn(
-            'last_entity_id',
-            [
-                'header'   => __('Last Entity ID'),
-                'index'    => 'last_entity_id',
-                'sortable' => false,
-            ]
-        );
-
-        $this->addColumn(
-            'last_entity_id_updated_at',
-            [
-                'header' => __('Last Heart Beat'),
-                'index'  => 'last_entity_id_updated_at',
-                'type'   => 'datetime',
-            ]
-        );
-
+                $this->addColumn(
+                    'last_entity_id_updated_at',
+                    [
+                        'header' => __('Last Heart Beat'),
+                        'index'  => 'last_entity_id_updated_at',
+                        'type'   => 'datetime',
+                    ]
+                );
+        */
         $this->addColumn(
             'status',
             [
@@ -178,6 +177,30 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index'          => 'status',
                 'sortable'       => false,
                 'frame_callback' => [$this, 'serviceResult'],
+            ]
+        );
+
+        $this->addColumn(
+            'info',
+            [
+                'header'         => __('Info'),
+                'width'          => '50px',
+                'index'          => 'indexer_id',
+                'sortable'       => false,
+                'frame_callback' => [$this, 'infoResult'],
+                'is_system'      => true,
+            ]
+        );
+
+        $this->addColumn(
+            'rebuild',
+            [
+                'header'         => __('Command line rebuild code (in your doc root)'),
+                'width'          => '50px',
+                'index'          => 'indexer_id',
+                'sortable'       => false,
+                'frame_callback' => [$this, 'commandResult'],
+                'is_system'      => true,
             ]
         );
 
@@ -190,18 +213,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index'          => 'indexer_id',
                 'sortable'       => false,
                 'frame_callback' => [$this, 'customerResult'],
-                'is_system'      => true,
-            ]
-        );
-
-        $this->addColumn(
-            'info',
-            [
-                'header'         => __('Info'),
-                'width'          => '50px',
-                'index'          => 'indexer_id',
-                'sortable'       => false,
-                'frame_callback' => [$this, 'infoResult'],
                 'is_system'      => true,
             ]
         );
@@ -285,6 +296,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @return string
      */
+    public function commandResult($value, $row)
+    {
+
+        return "php bin/magento panda:rebuild " . $value;
+    }
+
+    /**
+     * @param $value
+     * @param $row
+     *
+     * @return string
+     */
     public function descResult($value, $row)
     {
 
@@ -337,6 +360,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $url = $this->getUrl('*/*/reindex', ['id' => $value]);
 
-        return '<a href="' . $url . '">' . __('Force Rebuild') . '</a>';
+        return '<a href="' . $url . '">' . __('Full Rebuild using CRON') . '</a>';
     }
 }

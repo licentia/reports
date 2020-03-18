@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   17/03/20, 17:36 GMT
+ * @modified   18/03/20, 05:17 GMT
  *
  */
 
@@ -43,10 +43,16 @@ class Data extends \Licentia\Panda\Helper\Data
     public function getRebuildDateforIndexer($indexer)
     {
 
-        return $this->indexerCollection->create()
-                                       ->addFieldToFilter('indexer_id', $indexer)
-                                       ->getFirstItem()
-                                       ->getData('updated_at');
+        $updateDate = $this->indexerCollection->create()
+                                              ->addFieldToFilter('indexer_id', $indexer)
+                                              ->getFirstItem()
+                                              ->getData('updated_at');
+
+        if (!$updateDate) {
+            return __('Never');
+        }
+
+        return $this->timezone->formatDateTime($updateDate);
 
     }
 
