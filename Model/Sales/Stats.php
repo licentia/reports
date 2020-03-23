@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   23/03/20, 02:27 GMT
  *
  */
 
@@ -1024,24 +1024,22 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                             $history[$current['sku']] = $data[$i];
                         }
                     }
-                    if ($attributeCode) {
-                        if (!$date && !$segmentId) {
-                            $connection->delete($mainTable, ['segment_id IS NULL', 'attribute_code' => $attributeCode]);
-                        } elseif ($segmentId && !$date) {
-                            $connection->delete(
-                                $mainTable,
-                                ['segment_id=?' => $segmentId, 'attribute_code' => $attributeCode]
-                            );
-                        }
-                    } else {
-                        if (!$date && !$segmentId) {
-                            $connection->delete($mainTable, ['segment_id IS NULL']);
-                        }
 
-                        if ($segmentId && !$date) {
-                            $connection->delete($mainTable, ['segment_id IN(?)' => $segmentId]);
-                        }
+                    if ($date) {
+                        $deleteWhere['date=?'] = $date;
                     }
+
+                    if ($segmentId) {
+                        $deleteWhere['segment_id=?'] = $segmentId;
+                    } else {
+                        $deleteWhere['segment_id IS NULL'] = '';
+                    }
+
+                    if ($attributeCode) {
+                        $deleteWhere['attribute_code=?'] = $attributeCode;
+                    }
+
+                    $connection->delete($mainTable, $deleteWhere);
 
                     foreach ($data as $insert) {
                         $insert = array_intersect_key($insert, $this->describeTable($mainTable));

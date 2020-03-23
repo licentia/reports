@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   23/03/20, 02:21 GMT
  *
  */
 
@@ -714,11 +714,18 @@ class Orders extends \Magento\Framework\Model\AbstractModel
             }
         }
 
-        if (!$segmentId) {
-            $connection->delete($mainTable, "segment_id IS NULL");
-        } else {
-            $connection->delete($mainTable, ['segment_id=?' => $segmentId]);
+        $deleteWhere = [];
+
+        if ($date) {
+            $deleteWhere['date=?'] = $date;
         }
+        if ($segmentId) {
+            $deleteWhere['segment_id=?'] = $segmentId;
+        } else {
+            $deleteWhere['segment_id IS NULL'] = '';
+        }
+
+        $connection->delete($mainTable, $deleteWhere);
 
         foreach ($data as $insert) {
             $insert = array_intersect_key($insert, $this->describeTable($mainTable));

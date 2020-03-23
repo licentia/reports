@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   22/03/20, 22:23 GMT
  *
  */
 
@@ -37,7 +37,7 @@ class Info extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected $statsFactory;
+    protected $searchStatsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
@@ -60,17 +60,17 @@ class Info extends \Magento\Backend\Block\Template
     protected $segmentsFactory;
 
     /**
-     * View constructor.
+     * Info constructor.
      *
-     * @param \Licentia\Equity\Model\SegmentsFactory     $segmentsFactory
-     * @param \Licentia\Reports\Model\Sales\StatsFactory $statsFactory
-     * @param \Magento\Catalog\Model\ProductFactory      $productFactory
-     * @param \Magento\Backend\Block\Template\Context    $context
-     * @param array                                      $data
+     * @param \Licentia\Equity\Model\SegmentsFactory      $segmentsFactory
+     * @param \Licentia\Reports\Model\Search\StatsFactory $statsFactory
+     * @param \Magento\Catalog\Model\ProductFactory       $productFactory
+     * @param \Magento\Backend\Block\Template\Context     $context
+     * @param array                                       $data
      */
     public function __construct(
         \Licentia\Equity\Model\SegmentsFactory $segmentsFactory,
-        \Licentia\Reports\Model\Sales\StatsFactory $statsFactory,
+        \Licentia\Reports\Model\Search\StatsFactory $statsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Backend\Block\Template\Context $context,
         array $data = []
@@ -78,7 +78,7 @@ class Info extends \Magento\Backend\Block\Template
 
         parent::__construct($context, $data);
 
-        $this->statsFactory = $statsFactory;
+        $this->searchStatsFactory = $statsFactory;
         $this->productFactory = $productFactory;
         $this->segmentsFactory = $segmentsFactory;
 
@@ -120,7 +120,7 @@ class Info extends \Magento\Backend\Block\Template
     public function getTypes()
     {
 
-        return $this->statsFactory->create()->getTypes();
+        return $this->searchStatsFactory->create()->getTypes();
     }
 
     /**
