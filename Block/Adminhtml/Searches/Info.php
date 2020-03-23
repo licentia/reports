@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   22/03/20, 22:23 GMT
+ * @modified   23/03/20, 16:03 GMT
  *
  */
 
@@ -35,7 +35,7 @@ class Info extends \Magento\Backend\Block\Template
 {
 
     /**
-     * @var \Licentia\Reports\Model\Sales\StatsFactory
+     * @var \Licentia\Reports\Model\Search\StatsFactory
      */
     protected $searchStatsFactory;
 
