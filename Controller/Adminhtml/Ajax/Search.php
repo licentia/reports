@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   26/03/20, 23:29 GMT
  *
  */
 
@@ -143,7 +143,7 @@ class Search extends \Magento\Backend\App\Action
         if (!$products) {
             $return[] = [
                 'id'    => '',
-                'value' => __(''),
+                'value' => '',
                 'label' => __('No Records'),
             ];
         }
