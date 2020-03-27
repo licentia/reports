@@ -20,11 +20,13 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   27/03/20, 15:23 GMT
  *
  */
 
 namespace Licentia\Reports\Model\ResourceModel;
+
+use Licentia\Reports\Model\Indexer;
 
 /**
  * Class Items
@@ -33,6 +35,29 @@ namespace Licentia\Reports\Model\ResourceModel;
  */
 class Search extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+
+    /**
+     * @var \Licentia\Reports\Model\IndexerFactory
+     */
+    protected $indexer;
+
+    /**
+     * Search constructor.
+     *
+     * @param \Licentia\Reports\Model\IndexerFactory            $indexer
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param null                                              $connectionName
+     */
+    public function __construct(
+        \Licentia\Reports\Model\IndexerFactory $indexer,
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        $connectionName = null
+    ) {
+
+        parent::__construct($context, $connectionName);
+
+        $this->indexer = $indexer->create();
+    }
 
     /**
      * @var string
@@ -56,6 +81,12 @@ class Search extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function buildSearchGrid()
     {
+
+        if (!$this->indexer->canReindex('search_history')) {
+            throw new \RuntimeException("Indexer status does not allow reindexing");
+        }
+
+        $this->indexer->updateIndexStatus(Indexer::STATUS_WORKING, 'search_history');
 
         $searchTable = $this->getTable('panda_search_grid');
 
@@ -305,5 +336,7 @@ class Search extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $this->getConnection()
              ->query($query);
+
+        $this->indexer->updateIndexStatus(Indexer::STATUS_VALID, 'search_history');
     }
 }
