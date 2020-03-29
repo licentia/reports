@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   18/03/20, 06:05 GMT
+ * @modified   29/03/20, 03:20 GMT
  *
  */
 
@@ -255,7 +255,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         switch ($value) {
             CASE 'equity':
-                return __('Real-time update / mannually update');
+                return __('Real-time update / manually update');
                 break;
             CASE 'sales':
                 return __('Daily update @3:40am');
@@ -280,7 +280,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 return __('FULL rebuild every monday @3:20am');
                 break;
             CASE 'segments':
-                return __('Per-Segment option / mannually update');
+                return __('Per-Segment option / manually update');
                 break;
 
             default:
@@ -334,7 +334,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 return __('Product Recommendation Metadata');
                 break;
             CASE 'search_performance':
-                return __('Search matadata');
+                return __('Search metadata');
                 break;
             CASE 'venn':
                 return __('Venn Analytics');
