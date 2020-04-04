@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   04/04/20, 07:24 GMT
  *
  */
 
@@ -2175,12 +2175,12 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $tableName = $this->getTable(self::PRODUCTS_RELATIONS_TABLE_PREFIX_ATTRS . $type);
         }
 
-        $field = $this->connection->quoteIdentifier($field);
+        $fieldIdent = $this->connection->quoteIdentifier($field);
         $select = $this->connection->select()
                                    ->from($tableName, [])
                                    ->columns(
                                        [
-                                           'distinct' => new \Zend_Db_Expr("DISTINCT($field)"),
+                                           'distinct' => new \Zend_Db_Expr("DISTINCT($fieldIdent)"),
                                        ]
                                    )
                                    ->order($field);

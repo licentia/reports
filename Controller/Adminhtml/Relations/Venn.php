@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   04/04/20, 07:30 GMT
  *
  */
 
@@ -51,6 +51,7 @@ class Venn extends \Licentia\Reports\Controller\Adminhtml\Stats
             $this->messageManager->addWarning(
                 __(
                     'No Reports Build. Please check the manual on how to build reports. ' .
+                    'Please note these reports are based on invoiced order ' .
                     'If you want to reindex everything again, or if you just installed the extension, ' .
                     '<a href="%1">click here </a>. We recommend in alternative to run this command from the ' .
                     'command line: <pre>php bin/magento panda:rebuild</pre>',
