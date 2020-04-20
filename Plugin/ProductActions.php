@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   20/04/20, 17:08 GMT
  *
  */
 
@@ -40,14 +40,22 @@ class ProductActions
     protected $url;
 
     /**
-     * NewsletterSave constructor.
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * ProductActions constructor.
      *
-     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scope
+     * @param \Magento\Framework\UrlInterface                    $url
      */
     public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $scope,
         \Magento\Framework\UrlInterface $url
     ) {
 
+        $this->scopeConfig = $scope;
         $this->url = $url;
     }
 
@@ -62,6 +70,9 @@ class ProductActions
         $dataSource
     ) {
 
+        if (!$this->scopeConfig->isSetFlag('panda_equity/reports/product_list')) {
+            return $dataSource;
+        }
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
                 $item[$subject->getData('name')]['performance'] = [
