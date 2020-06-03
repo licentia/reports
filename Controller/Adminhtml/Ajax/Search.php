@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   26/03/20, 23:29 GMT
+ * @modified   03/06/20, 16:24 GMT
  *
  */
 
@@ -33,7 +33,7 @@ use Magento\Backend\App\Action;
  *
  * @package Licentia\Panda\Controller\Adminhtml\Ajax
  */
-class Search extends \Magento\Backend\App\Action
+class Search extends Action
 {
 
     /**

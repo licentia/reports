@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 16:24 GMT
  *
  */
 
@@ -78,15 +78,15 @@ class RebuildEverything extends Command
     public function __construct(
         \Licentia\Reports\Helper\Data $pandaHelper,
         \Licentia\Equity\Console\Command\EquityFactory $equity,
-        \Licentia\Reports\Console\Command\ExpectedReOrdersFactory $expectedReOrders,
-        \Licentia\Reports\Console\Command\ProductsPerformanceFactory $performance,
-        \Licentia\Reports\Console\Command\RecommendationsFactory $recommendations,
-        \Licentia\Reports\Console\Command\RelationsFactory $relations,
-        \Licentia\Reports\Console\Command\SalesOrdersFactory $salesOrders,
-        \Licentia\Reports\Console\Command\SearchHistoryFactory $searchHistory,
-        \Licentia\Reports\Console\Command\SearchPerformanceFactory $searchPerformance,
+        ExpectedReOrdersFactory $expectedReOrders,
+        ProductsPerformanceFactory $performance,
+        RecommendationsFactory $recommendations,
+        RelationsFactory $relations,
+        SalesOrdersFactory $salesOrders,
+        SearchHistoryFactory $searchHistory,
+        SearchPerformanceFactory $searchPerformance,
         \Licentia\Equity\Console\Command\SegmentsFactory $segments,
-        \Licentia\Reports\Console\Command\VennFactory $venn,
+        VennFactory $venn,
         \Magento\Framework\App\State $appState
     ) {
 

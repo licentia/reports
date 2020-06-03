@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   04/04/20, 07:24 GMT
+ * @modified   03/06/20, 16:24 GMT
  *
  */
 
@@ -523,7 +523,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             try {
                 $result = $this->connection->fetchAll($select);
             } catch (\Exception $e) {
-                $this->_logger->critical($e->getMessage());
+                $this->pandaHelper->logException($e);
             }
 
             if (count($result) == 0) {
@@ -616,7 +616,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                         $this->connection->insert($mainTable, $data);
                     }
                 } catch (\Exception $e) {
-                    $this->_logger->critical($e->getMessage());
+                    $this->pandaHelper->logException($e);
                 }
             }
 
@@ -668,7 +668,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                         $this->connection->update($mainTable, $updateData[2], ['related_2=?' => (string) $item]);
                         $this->connection->update($mainTable, $updateData[3], ['related_3=?' => (string) $item]);
                     } catch (\Exception $e) {
-                        $this->_logger->critical($e->getMessage());
+                        $this->pandaHelper->logException($e);
                     }
                 }
 
@@ -1415,7 +1415,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
         $attributesConfig = $this->scopeConfig->getValue(
             'panda_equity/reports/attributes',
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+            ScopeInterface::SCOPE_WEBSITE
         );
 
         if (!$attributesConfig) {
@@ -1712,7 +1712,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
         $attributes = $this->scopeConfig->getValue(
             'panda_equity/reports/attributes',
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+            ScopeInterface::SCOPE_WEBSITE
         );
 
         if (!$attributes) {
@@ -2300,7 +2300,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         if ($attributes) {
             $attributesConfig = $this->scopeConfig->getValue(
                 'panda_equity/reports/attributes',
-                \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE
+                ScopeInterface::SCOPE_WEBSITE
             );
 
             if (!$attributesConfig) {

@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 16:19 GMT
  *
  */
 
@@ -82,7 +82,7 @@ interface PricesVariationsInterface
      *
      * @param string $sku
      *
-     * @return \Licentia\Reports\Api\Data\PricesVariationsSearchResultsInterface
+     * @return PricesVariationsSearchResultsInterface
      */
 
     public function setSku($sku);
@@ -100,7 +100,7 @@ interface PricesVariationsInterface
      *
      * @param string $name
      *
-     * @return \Licentia\Reports\Api\Data\PricesVariationsSearchResultsInterface
+     * @return PricesVariationsSearchResultsInterface
      */
 
     public function setName($name);
@@ -118,7 +118,7 @@ interface PricesVariationsInterface
      *
      * @param string $price
      *
-     * @return \Licentia\Reports\Api\Data\PricesVariationsSearchResultsInterface
+     * @return PricesVariationsSearchResultsInterface
      */
 
     public function setPrice($price);
@@ -136,7 +136,7 @@ interface PricesVariationsInterface
      *
      * @param string $qty
      *
-     * @return \Licentia\Reports\Api\Data\PricesVariationsSearchResultsInterface
+     * @return PricesVariationsSearchResultsInterface
      */
 
     public function setQty($qty);
@@ -154,7 +154,7 @@ interface PricesVariationsInterface
      *
      * @param string $deviation
      *
-     * @return \Licentia\Reports\Api\Data\PricesVariationsSearchResultsInterface
+     * @return PricesVariationsSearchResultsInterface
      */
 
     public function setDeviation($deviation);
@@ -172,7 +172,7 @@ interface PricesVariationsInterface
      *
      * @param string $lastSale
      *
-     * @return \Licentia\Reports\Api\Data\PricesVariationsSearchResultsInterface
+     * @return PricesVariationsSearchResultsInterface
      */
 
     public function setLastSaleAt($lastSale);
@@ -190,7 +190,7 @@ interface PricesVariationsInterface
      *
      * @param string $firstSale
      *
-     * @return \Licentia\Reports\Api\Data\PricesVariationsSearchResultsInterface
+     * @return PricesVariationsSearchResultsInterface
      */
 
     public function setFirstSaleAt($firstSale);

@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   17/03/20, 20:41 GMT
+ * @modified   03/06/20, 16:19 GMT
  *
  */
 
@@ -35,9 +35,9 @@ class RebuildSearchPerformance
 {
 
     /**
-     * @var \Licentia\Reports\Logger\Logger
+     * @var \Licentia\Panda\Helper\Data
      */
-    protected $pandaLogger;
+    protected $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\SearchFactory
@@ -48,14 +48,14 @@ class RebuildSearchPerformance
      * RebuildSearchPerformance constructor.
      *
      * @param \Licentia\Reports\Model\Search\StatsFactory $searchFactory
-     * @param \Licentia\Reports\Logger\Logger             $pandaLogger
+     * @param \Licentia\Panda\Helper\Data                 $pandaHelper
      */
     public function __construct(
         \Licentia\Reports\Model\Search\StatsFactory $searchFactory,
-        \Licentia\Reports\Logger\Logger $pandaLogger
+        \Licentia\Panda\Helper\Data $pandaHelper
     ) {
 
-        $this->pandaLogger = $pandaLogger;
+        $this->pandaHelper = $pandaHelper;
         $this->searchStats = $searchFactory;
     }
 
@@ -68,7 +68,7 @@ class RebuildSearchPerformance
         try {
             $this->searchStats->create()->reindexSearchperformance();
         } catch (\Exception $e) {
-            $this->pandaLogger->warning($e->getMessage());
+            $this->pandaHelper->logWarning($e);
         }
 
         return true;

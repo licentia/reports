@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 16:16 GMT
  *
  */
 
@@ -810,7 +810,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
             try {
                 $connection->insert($mainTable, $insert);
             } catch (\Exception $e) {
-                $this->_logger->critical($e->getMessage());
+                $this->pandaHelper->logException($e);
             }
         }
 

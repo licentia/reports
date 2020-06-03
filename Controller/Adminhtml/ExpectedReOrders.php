@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 16:24 GMT
  *
  */
 
@@ -32,7 +32,7 @@ use Magento\Backend\App\Action;
 /**
  * Newsletter subscribers controller
  */
-class ExpectedReOrders extends \Magento\Backend\App\Action
+class ExpectedReOrders extends Action
 {
 
     /**
@@ -86,7 +86,7 @@ class ExpectedReOrders extends \Magento\Backend\App\Action
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Registry $registry,
         \Licentia\Reports\Helper\Data $pandaHelper,
-        \Licentia\Reports\Model\Sales\ExpectedReOrdersFactory $expectedReOrdersFactory,
+        ExpectedReOrdersFactory $expectedReOrdersFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
     ) {

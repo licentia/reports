@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 16:19 GMT
  *
  */
 
@@ -40,9 +40,9 @@ class IndexerStatus
     protected $scopeConfig;
 
     /**
-     * @var \Licentia\Reports\Logger\Logger
+     * @var \Licentia\Panda\Helper\Data
      */
-    protected $pandaLogger;
+    protected $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\IndexerFactory
@@ -54,17 +54,17 @@ class IndexerStatus
      *
      * @param \Licentia\Reports\Model\IndexerFactory             $indexerFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
-     * @param \Licentia\Reports\Logger\Logger                    $pandaLogger
+     * @param \Licentia\Panda\Helper\Data                        $pandaHelper
      */
     public function __construct(
         \Licentia\Reports\Model\IndexerFactory $indexerFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface,
-        \Licentia\Reports\Logger\Logger $pandaLogger
+        \Licentia\Panda\Helper\Data $pandaHelper
     ) {
 
         $this->indexer = $indexerFactory;
         $this->scopeConfig = $scopeConfigInterface;
-        $this->pandaLogger = $pandaLogger;
+        $this->pandaHelper = $pandaHelper;
     }
 
     /**
@@ -76,7 +76,7 @@ class IndexerStatus
         try {
             $this->indexer->create()->reindexInvalidated();
         } catch (\Exception $e) {
-            $this->pandaLogger->warning($e->getMessage());
+            $this->pandaHelper->logWarning($e);
         }
 
         return $this;

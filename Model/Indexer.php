@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 16:24 GMT
  *
  */
 
@@ -125,7 +125,7 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
      * @param \Licentia\Reports\Model\Sales\StatsFactory                   $performanceFactory
      * @param \Licentia\Reports\Model\Products\RelationsFactory            $relationsFactory
      * @param \Licentia\Reports\Model\Search\StatsFactory                  $searchFactory
-     * @param \Licentia\Reports\Model\SearchFactory                        $searchHistoryFactory
+     * @param SearchFactory                                                $searchHistoryFactory
      * @param \Licentia\Equity\Model\SegmentsFactory                       $segmentsFactory
      * @param \Licentia\Reports\Model\Sales\OrdersFactory                  $ordersFactory
      * @param \Licentia\Reports\Model\Sales\ExpectedReOrdersFactory        $expectedReOrdersFactory
@@ -141,7 +141,7 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
         \Licentia\Reports\Model\Sales\StatsFactory $performanceFactory,
         \Licentia\Reports\Model\Products\RelationsFactory $relationsFactory,
         \Licentia\Reports\Model\Search\StatsFactory $searchFactory,
-        \Licentia\Reports\Model\SearchFactory $searchHistoryFactory,
+        SearchFactory $searchHistoryFactory,
         \Licentia\Equity\Model\SegmentsFactory $segmentsFactory,
         \Licentia\Reports\Model\Sales\OrdersFactory $ordersFactory,
         \Licentia\Reports\Model\Sales\ExpectedReOrdersFactory $expectedReOrdersFactory,
@@ -178,7 +178,7 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
 
-        $this->_init(\Licentia\Reports\Model\ResourceModel\Indexer::class);
+        $this->_init(ResourceModel\Indexer::class);
     }
 
     /**

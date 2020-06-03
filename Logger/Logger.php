@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 14:25 GMT
  *
  */
 
@@ -31,7 +31,7 @@ namespace Licentia\Reports\Logger;
  *
  * @package Licentia\Reports\Logger
  */
-class Logger extends \Licentia\Panda\Logger\Logger
+class Logger extends \Licentia\Panda\Helper\Data
 {
 
 }

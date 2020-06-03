@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 16:24 GMT
  *
  */
 
@@ -84,7 +84,7 @@ class Recommendations extends \Magento\Framework\Model\AbstractModel
     protected $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
     protected $filterBuilder;
 
@@ -214,14 +214,14 @@ class Recommendations extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
+        FilterBuilder $filterBuilder,
         \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
         \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $quoteCollection,
         \Licentia\Reports\Helper\Data $newsletterData,
         \Licentia\Reports\Model\Products\RelationsFactory $relationsFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Product\Visibility $visibilityFactory,
+        Visibility $visibilityFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Config $configAttributes,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
@@ -271,7 +271,7 @@ class Recommendations extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
 
-        $this->_init(\Licentia\Reports\Model\ResourceModel\Recommendations::class);
+        $this->_init(ResourceModel\Recommendations::class);
 
     }
 

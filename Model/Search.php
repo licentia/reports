@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 16:24 GMT
  *
  */
 
@@ -64,7 +64,7 @@ class Search extends \Magento\Framework\Model\AbstractModel
      * @param array                                                        $data
      */
     public function __construct(
-        \Licentia\Reports\Model\Indexer $indexer,
+        Indexer $indexer,
         \Licentia\Reports\Model\ResourceModel\SearchFactory $searchResource,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -92,7 +92,7 @@ class Search extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
 
-        $this->_init(\Licentia\Reports\Model\ResourceModel\Search::class);
+        $this->_init(ResourceModel\Search::class);
     }
 
     /**

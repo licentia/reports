@@ -21,7 +21,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   23/03/20, 02:21 GMT
+ * @modified   03/06/20, 16:24 GMT
  *
  */
 
@@ -99,7 +99,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel
     protected $indexer;
 
     /**
-     * @var \Licentia\Reports\Model\Sales\StatsFactory
+     * @var StatsFactory
      */
     protected $salesStats;
 
@@ -143,7 +143,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Licentia\Reports\Helper\Data $helper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface,
-        \Licentia\Reports\Model\Sales\StatsFactory $statsFactory,
+        StatsFactory $statsFactory,
         \Licentia\Reports\Model\IndexerFactory $indexer,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
@@ -733,7 +733,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel
             try {
                 $connection->insert($mainTable, $insert);
             } catch (\Exception $e) {
-                $this->_logger->critical($e->getMessage());
+                $this->pandaHelper->logException($e);
             }
         }
 

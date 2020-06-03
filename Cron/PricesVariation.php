@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   29/01/20, 15:22 GMT
+ * @modified   03/06/20, 16:18 GMT
  *
  */
 
@@ -35,9 +35,9 @@ class PricesVariation
 {
 
     /**
-     * @var \Licentia\Reports\Logger\Logger
+     * @var \Licentia\Panda\Helper\Data
      */
-    protected $logger;
+    protected $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\Sales\PricesVariationFactory
@@ -48,15 +48,15 @@ class PricesVariation
      * PricesVariation constructor.
      *
      * @param \Licentia\Reports\Model\Sales\PricesVariationFactory $statsFactory
-     * @param \Licentia\Reports\Logger\Logger                      $pandaLogger
+     * @param \Licentia\Panda\Helper\Data                          $pandaHelper
      */
     public function __construct(
         \Licentia\Reports\Model\Sales\PricesVariationFactory $statsFactory,
-        \Licentia\Reports\Logger\Logger $pandaLogger
+        \Licentia\Panda\Helper\Data $pandaHelper
     ) {
 
         $this->pricesVariationFactory = $statsFactory;
-        $this->logger = $pandaLogger;
+        $this->pandaHelper = $pandaHelper;
     }
 
     /**
@@ -68,7 +68,7 @@ class PricesVariation
         try {
             $this->pricesVariationFactory->create()->updatePricesVariation();
         } catch (\Exception $e) {
-            $this->logger->warning($e->getMessage());
+            $this->pandaHelper->logWarning($e);
         }
     }
 }

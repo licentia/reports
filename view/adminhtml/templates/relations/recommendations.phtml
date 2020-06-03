@@ -20,7 +20,7 @@
  * @author     Bento Vilas Boas <bento@licentia.pt>
  * @copyright  Copyright (c) Licentia - https://licentia.pt
  * @license    GNU General Public License V3
- * @modified   17/03/20, 20:16 GMT
+ * @modified   03/06/20, 16:24 GMT
  *
  */
 
@@ -28,7 +28,7 @@
 
 /** @var $this \Magento\Framework\View\TemplateEngine\Php */
 
-$countries = \Zend_Locale::getTranslationList('Territory');
+$countries = Zend_Locale::getTranslationList('Territory');
 $collection = $block->getStatsArray();
 $skus = $block->getSKUs();
 
@@ -41,7 +41,6 @@ if ($block->getRequest()
     $extraFieldCount = 10;
 }
 
-
 /** @var Licentia\Reports\Helper\Data $update */
 $update = $this->helper('Licentia\Reports\Helper\Data')->getRebuildDateforIndexer('recommendations');
 ?>
@@ -50,7 +49,9 @@ $update = $this->helper('Licentia\Reports\Helper\Data')->getRebuildDateforIndexe
     <div class="messages">
         <div class="message message-warning warning">
             <div data-ui-id="messages-message-warning">
-                <strong><?= __('Last Update') ?>: </strong> <?= $update ?>. <?= __('Check the <a target="_blank" href="%1">Indexer</a> status for more info about stats updates',$block->getUrl('*/indexer')) ?>
+                <strong><?= __('Last Update') ?>: </strong> <?= $update ?>
+                . <?= __('Check the <a target="_blank" href="%1">Indexer</a> status for more info about stats updates',
+                    $block->getUrl('*/indexer')) ?>
             </div>
         </div>
     </div>
