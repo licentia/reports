@@ -395,7 +395,6 @@ class Recommendations extends \Magento\Framework\Model\AbstractModel
                     case 'recent':
                         $productsIds = $this->getRecentProducts();
                         break;
-                    case 'recent':
                     default:
                         $productsIds = [];
                         break;
