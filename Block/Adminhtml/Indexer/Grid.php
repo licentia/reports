@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Copyright (C) Licentia, Unipessoal LDA
  *
  * NOTICE OF LICENSE
@@ -247,32 +247,32 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
 
         switch ($value) {
-            CASE 'equity':
+            case 'equity':
                 return __('Real-time update / manually update');
                 break;
-            CASE 'sales':
+            case 'sales':
                 return __('Daily update @3:40am');
                 break;
-            CASE 'reorders':
+            case 'reorders':
                 return __('Daily update @2:20am');
                 break;
-            CASE 'search_history':
+            case 'search_history':
                 return __('Daily update @4:20am');
                 break;
-            CASE 'relations':
-            CASE 'performance':
+            case 'relations':
+            case 'performance':
                 return __('Daily udate for previous day @1:30am<br>FULL rebuild every monday @1:30am');
                 break;
-            CASE 'recommendations':
+            case 'recommendations':
                 return __('Daily udate for previous day @1:30am<br>FULL rebuild every monday @6:00am');
                 break;
-            CASE 'search_performance':
+            case 'search_performance':
                 return __('FULL rebuild every monday @2:20am');
                 break;
-            CASE 'venn':
+            case 'venn':
                 return __('FULL rebuild every monday @3:20am');
                 break;
-            CASE 'segments':
+            case 'segments':
                 return __('Per-Segment option / manually update');
                 break;
 
@@ -305,34 +305,34 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
 
         switch ($value) {
-            CASE 'equity':
+            case 'equity':
                 return __('Customer equity values (number of orders, amounts, etc.)');
                 break;
-            CASE 'sales':
+            case 'sales':
                 return __('Sales analytics');
                 break;
-            CASE 'reorders':
+            case 'reorders':
                 return __('Expected Reorders');
                 break;
-            CASE 'search_history':
+            case 'search_history':
                 return __('Search History Data');
                 break;
-            CASE 'relations':
+            case 'relations':
                 return __('Product metadata for Recommendations');
                 break;
-            CASE 'performance':
+            case 'performance':
                 return __('Product Sales Performance');
                 break;
-            CASE 'recommendations':
+            case 'recommendations':
                 return __('Product Recommendation Metadata');
                 break;
-            CASE 'search_performance':
+            case 'search_performance':
                 return __('Search metadata');
                 break;
-            CASE 'venn':
+            case 'venn':
                 return __('Venn Analytics');
                 break;
-            CASE 'segments':
+            case 'segments':
                 return __('Customer Segments');
                 break;
 

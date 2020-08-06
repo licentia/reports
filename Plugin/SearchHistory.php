@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * Copyright (C) Licentia, Unipessoal LDA
  *
  * NOTICE OF LICENSE
@@ -45,7 +45,7 @@ class SearchHistory
                     ->insert(
                         $subject->getTable('panda_search_history'),
                         [
-                            'query'      => $query->getQueryText(),
+                            'query'      => strtolower($query->getQueryText()),
                             'results'    => $query->getNumResults(),
                             'created_at' => new \Zend_Db_Expr('NOW()'),
                             'store_id'   => $query->getStoreId(),
