@@ -982,8 +982,15 @@ class Recommendations extends \Magento\Framework\Model\AbstractModel
 
         if ($this->getBasedOn() == 'current_product') {
 
-            $skus = (array) $this->_registry->registry('product')->getSku();
+            $sku = $this->_registry->registry('product');
 
+            if (!$sku) {
+                $this->_registry->registry('current_product');
+            }
+            $skus = [];
+            if ($sku) {
+                $skus = (array) $sku->getSku();
+            }
         }
 
         if (count($skus) == 0) {
