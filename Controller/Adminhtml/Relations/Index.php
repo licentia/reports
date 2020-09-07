@@ -50,6 +50,7 @@ class Index extends \Licentia\Reports\Controller\Adminhtml\Stats
                     '<pre>php bin/magento panda:rebuild</pre>'
                 )
             );
+            return $this->_redirect('pandar/indexer');
         }
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */

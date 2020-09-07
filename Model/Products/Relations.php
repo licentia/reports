@@ -1879,6 +1879,10 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $maxColumns = self::NUMBER_PRODUCTS_RELATED;
         }
 
+        if ($maxColumns == 0) {
+            $maxColumns = 1;
+        }
+
         $vennHistoryTable = $this->getTable('panda_products_venn_history');
 
         $row = [];

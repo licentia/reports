@@ -45,6 +45,7 @@ class Recommendations extends \Licentia\Reports\Controller\Adminhtml\Stats
                     $this->getUrl('*/relations/rebuildAll')
                 )
             );
+            return $this->_redirect('pandar/indexer');
         }
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
