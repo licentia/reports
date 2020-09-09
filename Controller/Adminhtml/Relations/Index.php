@@ -50,6 +50,12 @@ class Index extends \Licentia\Reports\Controller\Adminhtml\Stats
                     '<pre>php bin/magento panda:rebuild</pre>'
                 )
             );
+            $this->messageManager->addWarning(
+                __(
+                    "Please note reports are based on Orders data. If you don't have any orders, this message will always be displayed"
+                )
+            );
+
             return $this->_redirect('pandar/indexer');
         }
 

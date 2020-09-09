@@ -47,6 +47,11 @@ class Index extends \Licentia\Reports\Controller\Adminhtml\Stats
                     $this->getUrl('*/relations/rebuildAll')
                 )
             );
+            $this->messageManager->addWarning(
+                __(
+                    "Please note reports are based on Orders data. If you don't have any orders, this message will always be displayed"
+                )
+            );
             return $this->_redirect('pandar/indexer');
         }
 

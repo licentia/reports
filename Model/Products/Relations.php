@@ -32,7 +32,7 @@ use Magento\Store\Model\ScopeInterface;
 class Relations extends \Magento\Framework\Model\AbstractModel
 {
 
-    const SQL_AGE_EXPRESSION = "IF(age IS NULL,predicted_age,CASE  
+    const SQL_AGE_EXPRESSION = "IF(age IS NULL,ANY_VALUE(predicted_age),CASE  
                               WHEN age >= 18 AND age <= 24 THEN '18-24'  
                               WHEN age >=25 AND age <=34 THEN '25-34'
                               WHEN age >=35 AND age <=45 THEN '35-44'
@@ -2104,7 +2104,8 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
         unset($results[0]);
 
-        array_multisort(array_map('count', $results), SORT_ASC, $results);
+        $arrayMap = array_map('count', $results);
+        array_multisort($arrayMap, SORT_ASC, $results);
 
         return $results;
     }
