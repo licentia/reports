@@ -147,6 +147,15 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * @return string
+     */
+    public function getMySQLVersion()
+    {
+
+        return $this->pandaHelper->getConnection()->fetchOne('SELECT version()');
+    }
+
+    /**
      * @param        $sku
      *
      * @return array
@@ -508,7 +517,8 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         unset($results[0]);
 
-        array_multisort(array_map('count', $results), SORT_ASC, $results);
+        $arrayMap = array_map('count', $results);
+        array_multisort($arrayMap, SORT_ASC, $results);
 
         return $results;
     }
@@ -696,7 +706,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($type == 'age') {
-            $selectColumns['age_one'] = new \Zend_Db_Expr(\Licentia\Reports\Model\Products\Relations::SQL_AGE_EXPRESSION);
+            $selectColumns['age_one'] = new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion()));
         }
 
         if ($type == 'male' || $type == 'female') {
@@ -976,7 +986,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                         []
                     );
                     $newColumns = [
-                        'age' => new \Zend_Db_Expr(\Licentia\Reports\Model\Products\Relations::SQL_AGE_EXPRESSION),
+                        'age' => new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())),
                     ];
 
                     $select->columns($newColumns);
@@ -1178,7 +1188,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                     []
                 );
                 $newColumns = [
-                    'age' => new \Zend_Db_Expr(\Licentia\Reports\Model\Products\Relations::SQL_AGE_EXPRESSION),
+                    'age' => new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())),
                 ];
 
                 $select->columns($newColumns);

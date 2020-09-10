@@ -32,15 +32,6 @@ use Magento\Store\Model\ScopeInterface;
 class Relations extends \Magento\Framework\Model\AbstractModel
 {
 
-    const SQL_AGE_EXPRESSION = "IF(age IS NULL,ANY_VALUE(predicted_age),CASE  
-                              WHEN age >= 18 AND age <= 24 THEN '18-24'  
-                              WHEN age >=25 AND age <=34 THEN '25-34'
-                              WHEN age >=35 AND age <=45 THEN '35-44'
-                              WHEN age >=45 AND age <= 54 THEN '45-54'  
-                              WHEN age >=55 AND age <=64 THEN '55-64'  
-                              WHEN age >=65 THEN '65+'   
-                            END)";
-
     /**
      *
      */
@@ -217,6 +208,15 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $this->salesStats = $statsFactory;
 
         $this->connection = $this->getResource()->getConnection();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMySQLVersion()
+    {
+
+        return $this->connection->fetchOne('SELECT version()');
     }
 
     /**
@@ -442,7 +442,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     []
                 );
                 $newColumns = [
-                    'b_age' => new \Zend_Db_Expr(self::SQL_AGE_EXPRESSION),
+                    'b_age' => new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())),
                 ];
 
                 $select->columns($newColumns);
@@ -775,7 +775,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     []
                 );
                 $newColumns = [
-                    'b_age' => new \Zend_Db_Expr(self::SQL_AGE_EXPRESSION),
+                    'b_age' => new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())),
                 ];
 
                 $select->columns($newColumns);
@@ -1154,7 +1154,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
         if ($type == 'age') {
             $newColumns = [
-                'age' => new \Zend_Db_Expr('DISTINCT(' . self::SQL_AGE_EXPRESSION . ')'),
+                'age' => new \Zend_Db_Expr('DISTINCT(' . \Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion()) . ')'),
             ];
 
             $loops = $this->connection->fetchCol(
@@ -1270,11 +1270,11 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     []
                 );
                 $selectSkus->where(
-                    new \Zend_Db_Expr(self::SQL_AGE_EXPRESSION) . '=?',
+                    new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())) . '=?',
                     $loop
                 );
                 $selectQtys->where(
-                    new \Zend_Db_Expr(self::SQL_AGE_EXPRESSION) . '=?',
+                    new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())) . '=?',
                     $loop
                 );
 
@@ -1512,7 +1512,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     );
 
                     $newColumns = [
-                        'age' => new \Zend_Db_Expr(self::SQL_AGE_EXPRESSION),
+                        'age' => new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())),
                     ];
 
                     $select->columns($newColumns);
@@ -2380,7 +2380,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     []
                 );
                 $newColumns = [
-                    'age' => new \Zend_Db_Expr(self::SQL_AGE_EXPRESSION),
+                    'age' => new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())),
                 ];
 
                 $select->columns($newColumns);

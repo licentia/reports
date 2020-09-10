@@ -185,6 +185,15 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * @return string
+     */
+    public function getMySQLVersion()
+    {
+
+        return $this->pandaHelper->getConnection()->fetchOne('SELECT version()');
+    }
+
+    /**
      * @param        $skus
      * @param string $type
      * @param string $group
@@ -762,7 +771,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
                     if ($type == 'age') {
                         $selectColumns['age_one'] = new \Zend_Db_Expr(
-                            \Licentia\Reports\Model\Products\Relations::SQL_AGE_EXPRESSION
+                            \Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())
                         );
                     }
 

@@ -44,7 +44,7 @@ class Venn extends \Licentia\Reports\Controller\Adminhtml\Stats
             $this->messageManager->addWarning(
                 __(
                     'No Reports Build. Please check the manual on how to build reports. ' .
-                    'Please note these reports are based on invoiced order ' .
+                    'Please note these reports are based on invoiced orders ' .
                     'If you want to reindex everything again, or if you just installed the extension, ' .
                     '<a href="%1">click here </a>. We recommend in alternative to run this command from the ' .
                     'command line: <pre>php bin/magento panda:rebuild</pre>',
@@ -53,7 +53,7 @@ class Venn extends \Licentia\Reports\Controller\Adminhtml\Stats
             );
             $this->messageManager->addWarning(
                 __(
-                    "Please note reports are based on Orders data. If you don't have any orders, this message will always be displayed"
+                    "Please note reports are based on Orders/Invoices data. If you don't have any orders, this message will always be displayed"
                 )
             );
             return $this->_redirect('pandar/indexer');
