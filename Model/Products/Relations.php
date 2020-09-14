@@ -208,6 +208,8 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $this->salesStats = $statsFactory;
 
         $this->connection = $this->getResource()->getConnection();
+
+        $this->connection->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
     }
 
     /**

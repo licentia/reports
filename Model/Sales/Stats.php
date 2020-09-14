@@ -182,6 +182,10 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         $this->scopeConfig = $scopeConfigInterface;
         $this->statsFactory = $statsResource->create();
         $this->pandaHelper = $helper;
+
+        $this->pandaHelper->getConnection()
+                          ->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+
     }
 
     /**

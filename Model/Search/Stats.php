@@ -143,6 +143,9 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         $this->connection = $segmentsCollectionFactory->create()->getResource()->getConnection();
         $this->salesStats = $statsFactory;
 
+        $this->pandaHelper->getConnection()
+                          ->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+
         $this->minSearchNumber = $this->scopeConfig->getValue('panda_equity/reports/search');
     }
 

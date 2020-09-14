@@ -157,6 +157,10 @@ class Orders extends \Magento\Framework\Model\AbstractModel
         $this->salesStats = $statsFactory;
         $this->scopeConfig = $scopeConfigInterface;
         $this->pandaHelper = $helper;
+
+        $this->pandaHelper->getConnection()
+                          ->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+
     }
 
     /**
