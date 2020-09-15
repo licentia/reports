@@ -49,7 +49,7 @@ class Index extends \Licentia\Reports\Controller\Adminhtml\Stats
             );
             $this->messageManager->addWarning(
                 __(
-                    "Please note reports are based on Orders/Invoices data. If you don't have any orders, this message will always be displayed"
+                    "Please note search reports are based on logged-in customers searches. If no searches have been made, this message will always be displayed"
                 )
             );
             return $this->_redirect('pandar/indexer');
