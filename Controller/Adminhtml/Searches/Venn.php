@@ -55,6 +55,13 @@ class Venn extends \Licentia\Reports\Controller\Adminhtml\Stats
                     "Please note search reports are based on logged-in customers searches. If no searches have been made, this message will always be displayed"
                 )
             );
+            $this->messageManager->addWarning(
+                __(
+                    "Reports will only be built for terms searched for a minimum of %1 times ",
+                    $this->scopeConfig->getValue('panda_equity/reports/search')
+                )
+            );
+
             return $this->_redirect('pandar/indexer');
         }
 

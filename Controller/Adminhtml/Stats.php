@@ -80,6 +80,11 @@ class Stats extends Action
     protected $fileFactory;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param Action\Context                                    $context
      * @param \Magento\Framework\App\Response\Http\FileFactory  $fileFactory
      * @param \Magento\Catalog\Model\ProductFactory             $productFactory
@@ -92,6 +97,7 @@ class Stats extends Action
      * @param \Magento\Framework\View\Result\LayoutFactory      $resultLayoutFactory
      */
     public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface,
         Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -113,6 +119,7 @@ class Stats extends Action
         $this->resultJsonFactory = $resultJsonFactory;
         $this->productFactory = $productFactory;
         $this->fileFactory = $fileFactory;
+        $this->scopeConfig = $scopeConfigInterface;
 
         parent::__construct($context);
     }
