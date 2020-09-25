@@ -258,11 +258,11 @@ foreach (\Licentia\Reports\Model\Search\Stats::REPORT_TYPES as $type) {
                            class="input text">
                     <?php if ($sku) :
                         ?> <a
-                            href<?= /* @noEscape */
+                            href="<?= /* @noEscape */
                     $block->getUrl(
                         '*/*/*',
                         ['_current' => true, 'query' . $i => false]
-                    ) ?>
+                    ) ?>"
                             style="padding: 1px 6px; border: 2px solid darkred; border-radius: 8px; background-color: whitesmoke;
                                 font-size: 17px; line-height: 9px; color: #2b0000; font-weight: bolder;">X </a>
                     <?php endif; ?>
