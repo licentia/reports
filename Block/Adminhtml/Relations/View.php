@@ -36,12 +36,12 @@ class View extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Reports\Model\Products\RelationsFactory
      */
-    protected $relationsFactory;
+    protected \Licentia\Reports\Model\Products\RelationsFactory $relationsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected $productFactory;
+    protected \Magento\Catalog\Model\ProductFactory $productFactory;
 
     /**
      * @var
@@ -61,12 +61,12 @@ class View extends \Magento\Backend\Block\Template
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected $priceHelper;
+    protected \Magento\Framework\Pricing\Helper\Data $priceHelper;
 
     /**
      * @var
      */
-    protected $skus;
+    protected array $skus;
 
     /**
      * @var
@@ -76,17 +76,17 @@ class View extends \Magento\Backend\Block\Template
     /**
      * @var
      */
-    protected $possibleAttributes;
+    protected array $possibleAttributes;
 
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected $salesStats;
+    protected \Licentia\Reports\Model\Sales\StatsFactory $salesStats;
 
     /**
      * @var string
      */
-    protected $type;
+    protected string $type;
 
     /**
      * View constructor.

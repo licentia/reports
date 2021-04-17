@@ -38,32 +38,32 @@ class RecommendationsRepository implements RecommendationsRepositoryInterface
     /**
      * @var DataObjectHelper
      */
-    protected $dataObjectHelper;
+    protected DataObjectHelper $dataObjectHelper;
 
     /**
      * @var RecommendationsFactory
      */
-    protected $recommendationsFactory;
+    protected RecommendationsFactory $recommendationsFactory;
 
     /**
      * @var RecommendationsCollectionFactory
      */
-    protected $recommendationsCollectionFactory;
+    protected RecommendationsCollectionFactory $recommendationsCollectionFactory;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
      */
-    protected $customerFactory;
+    protected \Magento\Customer\Model\CustomerFactory $customerFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * @var ResourceRecommendations
      */
-    protected $resource;
+    protected ResourceRecommendations $resource;
 
     /**
      * @var
@@ -78,22 +78,22 @@ class RecommendationsRepository implements RecommendationsRepositoryInterface
     /**
      * @var DataObjectProcessor
      */
-    protected $dataObjectProcessor;
+    protected DataObjectProcessor $dataObjectProcessor;
 
     /**
      * @var RecommendationsInterfaceFactory
      */
-    protected $dataRecommendationsFactory;
+    protected RecommendationsInterfaceFactory $dataRecommendationsFactory;
 
     /**
      * @var \Magento\Framework\Registry
      */
-    protected $registry;
+    protected \Magento\Framework\Registry $registry;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    protected $request;
+    protected \Magento\Framework\App\RequestInterface $request;
 
     /**
      * RecommendationsRepository constructor.

@@ -55,7 +55,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventPrefix = 'panda_sales_orders';
+    protected string $_eventPrefix = 'panda_sales_orders';
 
     /**
      * Parameter name in event
@@ -64,17 +64,17 @@ class Orders extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventObject = 'panda_sales_orders';
+    protected string $_eventObject = 'panda_sales_orders';
 
     /**
      * @var \Licentia\Equity\Model\SegmentsFactory
      */
-    protected $segmentsFactory;
+    protected \Licentia\Equity\Model\SegmentsFactory $segmentsFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $timezone;
+    protected \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone;
 
     /**
      * @var
@@ -84,7 +84,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Framework\Filesystem
      */
-    protected $filesystem;
+    protected \Magento\Framework\Filesystem $filesystem;
 
     /**
      * @var \Licentia\Reports\Model\IndexerFactory
@@ -94,17 +94,17 @@ class Orders extends \Magento\Framework\Model\AbstractModel
     /**
      * @var StatsFactory
      */
-    protected $salesStats;
+    protected StatsFactory $salesStats;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Reports\Helper\Data $pandaHelper;
 
     /**
      * Initialize resource model

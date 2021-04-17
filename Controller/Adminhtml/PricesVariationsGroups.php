@@ -39,27 +39,27 @@ class PricesVariationsGroups extends Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $registry = null;
+    protected ?\Magento\Framework\Registry $registry = null;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $resultPageFactory;
+    protected \Magento\Framework\View\Result\PageFactory $resultPageFactory;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
-    protected $resultForwardFactory;
+    protected \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory;
 
     /**
      * @var \Magento\Framework\View\Result\LayoutFactory
      */
-    protected $layoutFactory;
+    protected \Magento\Framework\View\Result\LayoutFactory $layoutFactory;
 
     /**
      * @var \Licentia\Reports\Model\PricesVariationsGroupsFactory
      */
-    protected $pricesVariationsGroupsFactory;
+    protected \Licentia\Reports\Model\PricesVariationsGroupsFactory $pricesVariationsGroupsFactory;
 
     /**
      * PricesVariationsGroups constructor.

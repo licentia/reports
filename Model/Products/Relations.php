@@ -104,7 +104,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventPrefix = 'panda_products_relations';
+    protected string $_eventPrefix = 'panda_products_relations';
 
     /**
      * Parameter name in event
@@ -113,22 +113,22 @@ class Relations extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventObject = 'products_relations';
+    protected string $_eventObject = 'products_relations';
 
     /**
      * @var \Licentia\Equity\Model\SegmentsFactory
      */
-    protected $segmentsFactory;
+    protected \Licentia\Equity\Model\SegmentsFactory $segmentsFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $timezone;
+    protected \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Reports\Helper\Data $pandaHelper;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
@@ -143,7 +143,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected $salesStats;
+    protected \Licentia\Reports\Model\Sales\StatsFactory $salesStats;
 
     /**
      * Initialize resource model
@@ -159,12 +159,12 @@ class Relations extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected $productFactory;
+    protected \Magento\Catalog\Model\ProductFactory $productFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
 
     /**
      * Relations constructor.

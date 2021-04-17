@@ -35,7 +35,7 @@ class ExpectedReOrders extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventPrefix = 'panda_sales_expected_reorders';
+    protected string $_eventPrefix = 'panda_sales_expected_reorders';
 
     /**
      * Parameter name in event
@@ -44,7 +44,7 @@ class ExpectedReOrders extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventObject = 'panda_sales_expected_reorders';
+    protected string $_eventObject = 'panda_sales_expected_reorders';
 
     /**
      * @var \Licentia\Reports\Model\IndexerFactory

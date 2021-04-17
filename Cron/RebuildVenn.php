@@ -30,17 +30,17 @@ class RebuildVenn
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
 
     /**
      * @var \Licentia\Panda\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Panda\Helper\Data $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\Products\RelationsFactory
      */
-    protected $relations;
+    protected \Licentia\Reports\Model\Products\RelationsFactory $relations;
 
     /**
      * RebuildVenn constructor.

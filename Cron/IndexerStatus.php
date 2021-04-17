@@ -30,17 +30,17 @@ class IndexerStatus
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
 
     /**
      * @var \Licentia\Panda\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Panda\Helper\Data $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\IndexerFactory
      */
-    protected $indexer;
+    protected \Licentia\Reports\Model\IndexerFactory $indexer;
 
     /**
      * IndexerStatus constructor.

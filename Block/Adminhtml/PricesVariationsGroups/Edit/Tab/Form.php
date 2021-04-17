@@ -32,7 +32,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var \Magento\Customer\Model\ResourceModel\Group\Collection
      */
-    protected $customerGroup;
+    protected \Magento\Customer\Model\ResourceModel\Group\Collection $customerGroup;
 
     /**
      * Form constructor.

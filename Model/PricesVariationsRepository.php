@@ -37,7 +37,7 @@ class PricesVariationsRepository implements \Licentia\Reports\Api\PricesVariatio
     /**
      * @var DataObjectHelper
      */
-    protected $dataObjectHelper;
+    protected DataObjectHelper $dataObjectHelper;
 
     /**
      * @var
@@ -47,22 +47,22 @@ class PricesVariationsRepository implements \Licentia\Reports\Api\PricesVariatio
     /**
      * @var PricesVariationsSearchResultsInterfaceFactory
      */
-    protected $searchResultsFactory;
+    protected PricesVariationsSearchResultsInterfaceFactory $searchResultsFactory;
 
     /**
      * @var PricesVariationsInterfaceFactory
      */
-    protected $dataKpisFactory;
+    protected PricesVariationsInterfaceFactory $dataKpisFactory;
 
     /**
      * @var PricesVariationsCollectionFactory
      */
-    protected $pricesVariationsCollectionFactory;
+    protected PricesVariationsCollectionFactory $pricesVariationsCollectionFactory;
 
     /**
      * @var DataObjectProcessor
      */
-    protected $dataObjectProcessor;
+    protected DataObjectProcessor $dataObjectProcessor;
 
     /**
      * @var

@@ -34,12 +34,12 @@ class ProductsPerformance extends Command
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected $statsFactory;
+    protected \Licentia\Reports\Model\Sales\StatsFactory $statsFactory;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Reports\Helper\Data $pandaHelper;
 
     /**
      * ProductsPerformance constructor.

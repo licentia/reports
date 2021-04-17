@@ -30,12 +30,12 @@ class ExpectedReOrders
     /**
      * @var \Licentia\Panda\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Panda\Helper\Data $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\Sales\ExpectedReOrdersFactory
      */
-    protected $expectedReOrdersFactory;
+    protected \Licentia\Reports\Model\Sales\ExpectedReOrdersFactory $expectedReOrdersFactory;
 
     /**
      * ImportCustomers constructor.

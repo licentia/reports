@@ -30,12 +30,12 @@ class Info extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Reports\Model\Search\StatsFactory
      */
-    protected $searchStatsFactory;
+    protected \Licentia\Reports\Model\Search\StatsFactory $searchStatsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected $productFactory;
+    protected \Magento\Catalog\Model\ProductFactory $productFactory;
 
     /**
      * @var
@@ -50,7 +50,7 @@ class Info extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Equity\Model\SegmentsFactory
      */
-    protected $segmentsFactory;
+    protected \Licentia\Equity\Model\SegmentsFactory $segmentsFactory;
 
     /**
      * Info constructor.

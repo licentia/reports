@@ -39,102 +39,102 @@ class Recommendations extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventPrefix = 'panda_recommendations';
+    protected string $_eventPrefix = 'panda_recommendations';
 
     /**
      * @var SearchCriteriaInterface
      */
-    protected $_searchCriteria;
+    protected SearchCriteriaInterface $_searchCriteria;
 
     /**
      * @var
      */
-    protected $filterGroup;
+    protected \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroup;
 
     /**
      * @var $instances
      */
-    protected $instances = [];
+    protected array $instances = [];
 
     /**
      * @var $instancesById
      */
-    protected $instancesById = [];
+    protected array $instancesById = [];
 
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper
      */
-    protected $initializationHelper;
+    protected \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory
      */
-    protected $searchResultsFactory;
+    protected \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    protected \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
      * @var FilterBuilder
      */
-    protected $filterBuilder;
+    protected FilterBuilder $filterBuilder;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
-    protected $collectionFactory;
+    protected \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
      */
-    protected $extensionAttributesJoinProcessor;
+    protected \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
-    protected $productCollection;
+    protected \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollection;
 
     /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
      */
-    protected $quoteCollection;
+    protected \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $quoteCollection;
 
     /**
      * @var array
      */
-    protected $productIds = [];
+    protected array $productIds = [];
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected $helperData;
+    protected \Licentia\Reports\Helper\Data $helperData;
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
-    protected $productRepository;
+    protected \Magento\Catalog\Api\ProductRepositoryInterface $productRepository;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
-    protected $orderCollection;
+    protected \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollection;
 
     /**
      * @var \Magento\Reports\Model\ResourceModel\Event\CollectionFactory
      */
-    protected $eventsCollection;
+    protected \Magento\Reports\Model\ResourceModel\Event\CollectionFactory $eventsCollection;
 
     /**
      * @var \Magento\Wishlist\Model\WishlistFactory
      */
-    protected $wishlistFactory;
+    protected \Magento\Wishlist\Model\WishlistFactory $wishlistFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\VisibilityFactory
@@ -144,37 +144,37 @@ class Recommendations extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Catalog\Model\Config
      */
-    protected $configAttributes;
+    protected \Magento\Catalog\Model\Config $configAttributes;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $timezone;
+    protected \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone;
 
     /**
      * @var \Magento\Reports\Model\ResourceModel\Product\CollectionFactory
      */
-    protected $soldCollection;
+    protected \Magento\Reports\Model\ResourceModel\Product\CollectionFactory $soldCollection;
 
     /**
      * @var Products\RelationsFactory
      */
-    protected $relationsFactory;
+    protected Products\RelationsFactory $relationsFactory;
 
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
      */
-    protected $categoryFactory;
+    protected \Magento\Catalog\Model\CategoryFactory $categoryFactory;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Reports\Helper\Data $pandaHelper;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    protected $request;
+    protected \Magento\Framework\App\RequestInterface $request;
 
     /**
      * Recommendations constructor.
