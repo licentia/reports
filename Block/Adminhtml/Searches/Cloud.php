@@ -36,12 +36,12 @@ class Cloud extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Reports\Model\Search\StatsFactory
      */
-    protected \Licentia\Reports\Model\Search\StatsFactory $relationsFactory;
+    protected $relationsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected \Magento\Catalog\Model\ProductFactory $productFactory;
+    protected $productFactory;
 
     /**
      * @var
@@ -61,7 +61,7 @@ class Cloud extends \Magento\Backend\Block\Template
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected \Magento\Framework\Pricing\Helper\Data $priceHelper;
+    protected $priceHelper;
 
     /**
      * @var
@@ -81,12 +81,12 @@ class Cloud extends \Magento\Backend\Block\Template
     /**
      * @var
      */
-    protected string $type;
+    protected $type;
 
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected \Licentia\Reports\Model\Sales\StatsFactory $salesStats;
+    protected $salesStats;
 
     /**
      * Cloud constructor.

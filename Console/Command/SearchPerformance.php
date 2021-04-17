@@ -39,7 +39,7 @@ class SearchPerformance extends Command
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected \Licentia\Reports\Helper\Data $pandaHelper;
+    protected $pandaHelper;
 
     /**
      * SearchPerformance constructor.

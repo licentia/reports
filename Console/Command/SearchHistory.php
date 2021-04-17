@@ -34,12 +34,12 @@ class SearchHistory extends Command
     /**
      * @var \Licentia\Reports\Model\ResourceModel\SearchFactory
      */
-    protected \Licentia\Reports\Model\ResourceModel\SearchFactory $searchHistory;
+    protected $searchHistory;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected \Licentia\Reports\Helper\Data $pandaHelper;
+    protected $pandaHelper;
 
     /**
      * SearchHistory constructor.

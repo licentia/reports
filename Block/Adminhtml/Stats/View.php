@@ -30,12 +30,12 @@ class View extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected \Licentia\Reports\Model\Sales\StatsFactory $statsFactory;
+    protected $statsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected \Magento\Catalog\Model\ProductFactory $productFactory;
+    protected $productFactory;
 
     /**
      * @var
@@ -50,12 +50,12 @@ class View extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Equity\Model\SegmentsFactory
      */
-    protected \Licentia\Equity\Model\SegmentsFactory $segmentsFactory;
+    protected $segmentsFactory;
 
     /**
      * @var array
      */
-    protected array $columnsTitles = [
+    protected $columnsTitles = [
         'item_id'                                => 'ID',
         'age'                                    => 'Age',
         'segment_id'                             => 'Segment ID',
@@ -102,37 +102,37 @@ class View extends \Magento\Backend\Block\Template
     /**
      * @var array
      */
-    protected array $columnsTitlesAge = ['18-24', '25-34', '35-44', '45-54', '55-64', '65+',];
+    protected $columnsTitlesAge = ['18-24', '25-34', '35-44', '45-54', '55-64', '65+',];
 
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected \Magento\Framework\Pricing\Helper\Data $priceHelper;
+    protected $priceHelper;
 
     /**
      * @var
      */
-    protected array $skus;
+    protected $skus;
 
     /**
      * @var
      */
-    protected string $type;
+    protected $type;
 
     /**
      * @var
      */
-    protected array $possibleAttributes;
+    protected $possibleAttributes;
 
     /**
      * @var
      */
-    protected array $possibleAttributesValues;
+    protected $possibleAttributesValues;
 
     /**
      * @var \Licentia\Reports\Model\Products\RelationsFactory
      */
-    protected \Licentia\Reports\Model\Products\RelationsFactory $relationsFactory;
+    protected $relationsFactory;
 
     /**
      * View constructor.

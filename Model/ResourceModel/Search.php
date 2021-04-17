@@ -55,7 +55,7 @@ class Search extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @var string
      */
-    protected string $_idFieldName = 'item_id';
+    protected $_idFieldName = 'item_id';
 
     /**
      * Initialize resource model

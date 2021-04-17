@@ -34,12 +34,12 @@ class ExpectedReOrders extends Command
     /**
      * @var \Licentia\Reports\Model\Sales\ExpectedReOrdersFactory
      */
-    protected \Licentia\Reports\Model\Sales\ExpectedReOrdersFactory $expectedReOrders;
+    protected $expectedReOrders;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected \Licentia\Reports\Helper\Data $pandaHelper;
+    protected $pandaHelper;
 
     /**
      * ExpectedReOrders constructor.
