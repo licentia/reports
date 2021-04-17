@@ -30,17 +30,17 @@ class RebuildSalesStatsForYesterday
     /**
      * @var \Licentia\Panda\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Panda\Helper\Data $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected $statsFactory;
+    protected \Licentia\Reports\Model\Sales\StatsFactory $statsFactory;
 
     /**
      * @var \Licentia\Reports\Model\Sales\OrdersFactory
      */
-    protected $ordersFactory;
+    protected \Licentia\Reports\Model\Sales\OrdersFactory $ordersFactory;
 
     /**
      * RebuildSalesStatsForYesterday constructor.

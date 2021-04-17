@@ -85,7 +85,7 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventPrefix = 'panda_indexer_state';
+    protected string $_eventPrefix = 'panda_indexer_state';
 
     /**
      * Parameter name in event
@@ -94,7 +94,7 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventObject = 'panda_indexer_state';
+    protected string $_eventObject = 'panda_indexer_state';
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
@@ -104,12 +104,12 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Reports\Helper\Data $pandaHelper;
 
     /**
      * @var array
      */
-    private $indexers = [];
+    private array $indexers = [];
 
     /**
      * Indexer constructor.

@@ -31,12 +31,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var \Licentia\Reports\Model\ResourceModel\Indexer\CollectionFactory
      */
-    protected $collectionFactory;
+    protected \Licentia\Reports\Model\ResourceModel\Indexer\CollectionFactory $collectionFactory;
 
     /**
      * @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
      */
-    protected $pageLayoutBuilder;
+    protected \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context                          $context
@@ -61,11 +61,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Row click url
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param \Magento\Framework\DataObject $item
      *
      * @return string
      */
-    public function getRowUrl($row)
+    public function getRowUrl($item)
     {
 
         return false;

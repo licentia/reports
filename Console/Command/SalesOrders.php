@@ -34,12 +34,12 @@ class SalesOrders extends Command
     /**
      * @var \Licentia\Reports\Model\Sales\OrdersFactory
      */
-    protected $salesOrders;
+    protected \Licentia\Reports\Model\Sales\OrdersFactory $salesOrders;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Reports\Helper\Data $pandaHelper;
 
     /**
      * SalesOrders constructor.

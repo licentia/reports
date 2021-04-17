@@ -31,7 +31,7 @@ class PricesVariationsGroups extends \Magento\Framework\Model\AbstractModel
     /**
      * @var Sales\PricesVariationFactory
      */
-    protected $pricesVariationsFactory;
+    protected Sales\PricesVariationFactory $pricesVariationsFactory;
 
     /**
      * PricesVariationsGroups constructor.
@@ -62,7 +62,7 @@ class PricesVariationsGroups extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventPrefix = 'panda_prices_variation_groups';
+    protected string $_eventPrefix = 'panda_prices_variation_groups';
 
     /**
      * Parameter name in event
@@ -71,7 +71,7 @@ class PricesVariationsGroups extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventObject = 'panda_prices_variation_groups';
+    protected string $_eventObject = 'panda_prices_variation_groups';
 
     /**
      * Initialize resource model

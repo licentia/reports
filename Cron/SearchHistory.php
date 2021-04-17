@@ -30,12 +30,12 @@ class SearchHistory
     /**
      * @var \Licentia\Panda\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Panda\Helper\Data $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\ResourceModel\SearchFactory
      */
-    protected $searchResource;
+    protected \Licentia\Reports\Model\ResourceModel\SearchFactory $searchResource;
 
     /**
      * SearchHistory constructor.

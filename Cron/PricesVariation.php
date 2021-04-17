@@ -30,12 +30,12 @@ class PricesVariation
     /**
      * @var \Licentia\Panda\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Panda\Helper\Data $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\Sales\PricesVariationFactory
      */
-    protected $pricesVariationFactory;
+    protected \Licentia\Reports\Model\Sales\PricesVariationFactory $pricesVariationFactory;
 
     /**
      * PricesVariation constructor.

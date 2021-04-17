@@ -32,27 +32,27 @@ class Recommendations extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected $pandaHelper;
+    protected \Licentia\Reports\Helper\Data $pandaHelper;
 
     /**
      * @var \Magento\Catalog\Helper\Output
      */
-    protected $helperOutput;
+    protected \Magento\Catalog\Helper\Output $helperOutput;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
      */
-    protected $urlEncoder;
+    protected \Magento\Framework\Url\EncoderInterface $urlEncoder;
 
     /**
      * @var \Magento\Framework\Data\Form\FormKey
      */
-    protected $formKey;
+    protected \Magento\Framework\Data\Form\FormKey $formKey;
 
     /**
      * @var \Licentia\Reports\Model\RecommendationsFactory
      */
-    protected $recommendationsFactory;
+    protected \Licentia\Reports\Model\RecommendationsFactory $recommendationsFactory;
 
     /**
      * Recommendations constructor.

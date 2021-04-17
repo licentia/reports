@@ -38,12 +38,12 @@ class Search extends \Magento\Framework\Model\AbstractModel
     /**
      * @var ResourceModel\SearchFactory
      */
-    protected $searchResource;
+    protected ResourceModel\SearchFactory $searchResource;
 
     /**
      * @var Indexer
      */
-    protected $indexer;
+    protected Indexer $indexer;
 
     /**
      * Search constructor.
@@ -77,7 +77,7 @@ class Search extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected $_eventPrefix = 'panda_search_grid';
+    protected string $_eventPrefix = 'panda_search_grid';
 
     /**
      *

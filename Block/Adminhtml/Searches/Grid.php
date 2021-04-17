@@ -36,12 +36,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @var \Magento\Framework\Registry
      */
-    protected $registry;
+    protected \Magento\Framework\Registry $registry;
 
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected $salesStats;
+    protected \Licentia\Reports\Model\Sales\StatsFactory $salesStats;
 
     /**
      * Grid constructor.
