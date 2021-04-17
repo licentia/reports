@@ -59,12 +59,12 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Licentia\Equity\Model\ResourceModel\Segments\CollectionFactory
      */
-    protected \Licentia\Equity\Model\ResourceModel\Segments\CollectionFactory $segmentsCollectionFactory;
+    protected $segmentsCollectionFactory;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected \Licentia\Reports\Helper\Data $pandaHelper;
+    protected $pandaHelper;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
@@ -74,7 +74,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
+    protected $scopeConfig;
 
     /**
      * @var
@@ -89,7 +89,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected \Licentia\Reports\Model\Sales\StatsFactory $salesStats;
+    protected $salesStats;
 
     /**
      * @var mixed

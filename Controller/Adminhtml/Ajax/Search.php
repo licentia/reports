@@ -34,27 +34,27 @@ class Search extends Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected ?\Magento\Framework\Registry $registry = null;
+    protected $registry = null;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected \Licentia\Reports\Helper\Data $pandaHelper;
+    protected $pandaHelper;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory;
+    protected $resultJsonFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected \Magento\Catalog\Model\ProductFactory $productFactory;
+    protected $productFactory;
 
     /**
      * @var \Licentia\Reports\Model\SearchFactory
      */
-    protected \Licentia\Reports\Model\SearchFactory $searchFactory;
+    protected $searchFactory;
 
     /**
      * @param Action\Context                                   $context

@@ -30,12 +30,12 @@ class Info extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected \Licentia\Reports\Model\Sales\StatsFactory $statsFactory;
+    protected $statsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected \Magento\Catalog\Model\ProductFactory $productFactory;
+    protected $productFactory;
 
     /**
      * @var
@@ -50,22 +50,22 @@ class Info extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Equity\Model\SegmentsFactory
      */
-    protected \Licentia\Equity\Model\SegmentsFactory $segmentsFactory;
+    protected $segmentsFactory;
 
     /**
      * @var \Licentia\Reports\Model\Sales\Orders
      */
-    protected \Licentia\Reports\Model\Sales\Orders $salesorder;
+    protected $salesorder;
 
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected \Magento\Framework\Pricing\Helper\Data $priceHelper;
+    protected $priceHelper;
 
     /**
      * @var \Magento\Framework\Registry
      */
-    protected \Magento\Framework\Registry $registry;
+    protected $registry;
 
     /**
      * Info constructor.

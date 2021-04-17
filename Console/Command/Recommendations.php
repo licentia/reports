@@ -34,12 +34,12 @@ class Recommendations extends Command
     /**
      * @var \Licentia\Reports\Model\Products\RelationsFactory
      */
-    protected \Licentia\Reports\Model\Products\RelationsFactory $relationsFactory;
+    protected $relationsFactory;
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected \Licentia\Reports\Helper\Data $pandaHelper;
+    protected $pandaHelper;
 
     /**
      * Recommendations constructor.

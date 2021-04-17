@@ -30,17 +30,17 @@ class RebuildRecommendations
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
+    protected $scopeConfig;
 
     /**
      * @var \Licentia\Panda\Helper\Data
      */
-    protected \Licentia\Panda\Helper\Data $pandaHelper;
+    protected $pandaHelper;
 
     /**
      * @var \Licentia\Reports\Model\Products\RelationsFactory
      */
-    protected \Licentia\Reports\Model\Products\RelationsFactory $relationsFactory;
+    protected $relationsFactory;
 
     /**
      * RebuildRecommendations constructor.

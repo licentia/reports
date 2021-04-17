@@ -40,17 +40,17 @@ class RebuildEverything extends Command
     /**
      * @var array
      */
-    protected array $classes = [];
+    protected $classes = [];
 
     /**
      * @var \Licentia\Reports\Helper\Data
      */
-    protected \Licentia\Reports\Helper\Data $pandaHelper;
+    protected $pandaHelper;
 
     /**
      * @var \Magento\Framework\App\State
      */
-    protected \Magento\Framework\App\State $appState;
+    protected $appState;
 
     /**
      * RebuildEverything constructor.

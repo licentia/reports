@@ -30,12 +30,12 @@ class Venn extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Reports\Model\Search\StatsFactory
      */
-    protected \Licentia\Reports\Model\Search\StatsFactory $relationsFactory;
+    protected $relationsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected \Magento\Catalog\Model\ProductFactory $productFactory;
+    protected $productFactory;
 
     /**
      * @var
@@ -55,12 +55,12 @@ class Venn extends \Magento\Backend\Block\Template
     /**
      * @var \Magento\Framework\Pricing\Helper\Data
      */
-    protected \Magento\Framework\Pricing\Helper\Data $priceHelper;
+    protected $priceHelper;
 
     /**
      * @var
      */
-    protected array $queries;
+    protected $queries;
 
     /**
      * @var
@@ -75,7 +75,7 @@ class Venn extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Equity\Model\SegmentsFactory
      */
-    protected \Licentia\Equity\Model\SegmentsFactory $segmentsFactory;
+    protected $segmentsFactory;
 
     /**
      * @var
@@ -100,7 +100,7 @@ class Venn extends \Magento\Backend\Block\Template
     /**
      * @var
      */
-    protected string $type;
+    protected $type;
 
     /**
      * @var
@@ -115,7 +115,7 @@ class Venn extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Reports\Model\Sales\StatsFactory
      */
-    protected \Licentia\Reports\Model\Sales\StatsFactory $salesStats;
+    protected $salesStats;
 
     /**
      * Venn constructor.

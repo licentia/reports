@@ -44,12 +44,12 @@ class ExpectedReOrdersActions extends Column
     /**
      * @var UrlInterface
      */
-    protected UrlInterface $urlBuilder;
+    protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\AuthorizationInterface
      */
-    protected \Magento\Framework\AuthorizationInterface $authorization;
+    protected $authorization;
 
     /**
      * Constructor

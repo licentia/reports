@@ -30,12 +30,12 @@ class InfoCloud extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Reports\Model\Search\StatsFactory
      */
-    protected \Licentia\Reports\Model\Search\StatsFactory $statsFactory;
+    protected $statsFactory;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected \Magento\Catalog\Model\ProductFactory $productFactory;
+    protected $productFactory;
 
     /**
      * @var
@@ -50,7 +50,7 @@ class InfoCloud extends \Magento\Backend\Block\Template
     /**
      * @var \Licentia\Equity\Model\SegmentsFactory
      */
-    protected \Licentia\Equity\Model\SegmentsFactory $segmentsFactory;
+    protected $segmentsFactory;
 
     /**
      * View constructor.

@@ -34,7 +34,7 @@ class PricesVariation extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected string $_eventPrefix = 'panda_prices_variation';
+    protected $_eventPrefix = 'panda_prices_variation';
 
     /**
      * Parameter name in event
@@ -43,12 +43,12 @@ class PricesVariation extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    protected string $_eventObject = 'panda_prices_variation';
+    protected $_eventObject = 'panda_prices_variation';
 
     /**
      * @var \Licentia\Equity\Helper\Data
      */
-    protected \Licentia\Equity\Helper\Data $pandaHelper;
+    protected $pandaHelper;
 
     /**
      * Initialize resource model

@@ -30,12 +30,12 @@ class ProductActions
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected \Magento\Framework\UrlInterface $url;
+    protected $url;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
+    protected $scopeConfig;
 
     /**
      * ProductActions constructor.

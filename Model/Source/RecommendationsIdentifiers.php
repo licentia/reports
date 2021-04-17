@@ -31,7 +31,7 @@ class RecommendationsIdentifiers implements \Magento\Framework\Option\ArrayInter
     /**
      * @var \Licentia\Reports\Model\RecommendationsFactory
      */
-    protected \Licentia\Reports\Model\RecommendationsFactory $recommendationsFactory;
+    protected $recommendationsFactory;
 
     /**
      * Popups constructor.
