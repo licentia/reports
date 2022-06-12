@@ -36,7 +36,7 @@ class SearchHistory
      */
     public function afterSaveNumResults(
         \Magento\Search\Model\ResourceModel\Query $subject,
-        $result = null,
+        $result,
         \Magento\Search\Model\Query $query
     ) {
 
