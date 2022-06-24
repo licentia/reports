@@ -207,9 +207,13 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $this->indexer = $indexer->create();
         $this->salesStats = $statsFactory;
 
-        $this->connection = $this->getResource()->getConnection();
+        //        $this->getConnection()->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+    }
 
-        $this->connection->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+    public function getConnection()
+    {
+
+        return $this->pandaHelper->getConnection();
     }
 
     /**
@@ -218,7 +222,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
     public function getMySQLVersion()
     {
 
-        return $this->connection->fetchOne('SELECT version()');
+        return $this->getConnection()->fetchOne('SELECT version()');
     }
 
     /**
@@ -345,21 +349,21 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $productsTable = $this->getTable('catalog_product_entity');
 
         if (!$afterPurchase && !$date && !$segmentId) {
-            $this->connection->delete($mainTable, ['segment_id IS NULL']);
+            $this->getConnection()->delete($mainTable, ['segment_id IS NULL']);
         }
 
         if (!$afterPurchase && $segmentId && !$date) {
-            $this->connection->delete($mainTable, ['segment_id=?' => $segmentId]);
+            $this->getConnection()->delete($mainTable, ['segment_id=?' => $segmentId]);
         }
 
-        $lastProductId = (int) $this->connection->fetchOne(
+        $lastProductId = (int) $this->getConnection()->fetchOne(
             "SELECT MAX(entity_id) FROM 
-            " . $this->connection->quoteIdentifier($productsTable)
+            " . $this->getConnection()->quoteIdentifier($productsTable)
         );
 
-        $firstProductId = (int) $this->connection->fetchOne(
+        $firstProductId = (int) $this->getConnection()->fetchOne(
             "SELECT MIN(entity_id) FROM 
-            " . $this->connection->quoteIdentifier($productsTable)
+            " . $this->getConnection()->quoteIdentifier($productsTable)
         );
 
         $rowsToProcess = 1000;
@@ -370,7 +374,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $hasCountry = false;
         $hasRegion = false;
         while (true) {
-            $select = $this->connection->select();
+            $select = $this->getConnection()->select();
             $select->from(['a' => $salesItemTable], [])
                    ->joinLeft(['c' => $productsTable], 'a.sku = c.sku', ['original' => 'sku', 'entity_id'])
                    ->joinInner(['b' => $salesItemTable], 'a.order_id = b.order_id AND a.sku != b.sku ', ['sku'])
@@ -480,16 +484,16 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $select->where('s.state NOT IN (?)', ['canceled', 'new', 'hold']);
 
             if ($afterPurchase) {
-                $subSelect = $this->connection->select()
-                                              ->from($salesItemTable, ['order_id'])
-                                              ->joinInner(
-                                                  $salesTable,
-                                                  $salesItemTable . '.order_id = ' . $salesTable . '.entity_id',
-                                                  []
-                                              )
-                                              ->where($salesItemTable . '.sku = a.sku')
-                                              ->where($salesTable . '.customer_email = s.customer_email')
-                                              ->order($salesItemTable . '.item_id ASC');
+                $subSelect = $this->getConnection()->select()
+                                  ->from($salesItemTable, ['order_id'])
+                                  ->joinInner(
+                                      $salesTable,
+                                      $salesItemTable . '.order_id = ' . $salesTable . '.entity_id',
+                                      []
+                                  )
+                                  ->where($salesItemTable . '.sku = a.sku')
+                                  ->where($salesTable . '.customer_email = s.customer_email')
+                                  ->order($salesItemTable . '.item_id ASC');
 
                 $select->where(
                     'a.order_id = COALESCE( (' . (string) $subSelect . ' LIMIT 1,1), (' . (string) $subSelect . ' LIMIT 1) )'
@@ -516,7 +520,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
             $result = [];
             try {
-                $result = $this->connection->fetchAll($select);
+                $result = $this->getConnection()->fetchAll($select);
             } catch (\Exception $e) {
                 $this->pandaHelper->logException($e);
             }
@@ -565,10 +569,10 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
                 $data = [];
                 $data['sku'] = $sku;
-                $data['total'] = $this->connection->fetchOne(
-                    $this->connection->select()
-                                     ->from($salesItemTable, [new \Zend_Db_Expr('SUM(qty_invoiced)')])
-                                     ->where('sku=?', (string) $sku)
+                $data['total'] = $this->getConnection()->fetchOne(
+                    $this->getConnection()->select()
+                         ->from($salesItemTable, [new \Zend_Db_Expr('SUM(qty_invoiced)')])
+                         ->where('sku=?', (string) $sku)
                 );
 
                 if ($segmentId) {
@@ -602,13 +606,13 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
                 try {
                     if ($date) {
-                        $this->connection->delete($mainTable, ['sku =?' => (string) $sku]);
+                        $this->getConnection()->delete($mainTable, ['sku =?' => (string) $sku]);
                     }
 
                     if ($afterPurchase) {
-                        $this->connection->update($mainTable, $data, ['sku=?' => (string) $sku]);
+                        $this->getConnection()->update($mainTable, $data, ['sku=?' => (string) $sku]);
                     } else {
-                        $this->connection->insert($mainTable, $data);
+                        $this->getConnection()->insert($mainTable, $data);
                     }
                 } catch (\Exception $e) {
                     $this->pandaHelper->logException($e);
@@ -627,9 +631,9 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $limit = 1000;
 
             while (true) {
-                $selectTable = $this->connection->select()
-                                                ->from($mainTable, ['sku'])
-                                                ->limit($limit, $start);
+                $selectTable = $this->getConnection()->select()
+                                    ->from($mainTable, ['sku'])
+                                    ->limit($limit, $start);
 
                 if ($date) {
                     $selectTable->where('updated_at=?', $date);
@@ -639,10 +643,10 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     $select->where('segment_id=?', $segmentId);
                 }
 
-                $result = $this->connection->fetchCol($selectTable);
+                $result = $this->getConnection()->fetchCol($selectTable);
 
                 foreach ($result as $item) {
-                    $info = $this->connection->fetchRow(
+                    $info = $this->getConnection()->fetchRow(
                         "SELECT related_1,related_2,related_3,related_4,related_5,
                                     related_6,related_7,related_8,related_9,related_10 
                                 FROM $mainTable 
@@ -659,9 +663,9 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     }
 
                     try {
-                        $this->connection->update($mainTable, $updateData[1], ['related_1=?' => (string) $item]);
-                        $this->connection->update($mainTable, $updateData[2], ['related_2=?' => (string) $item]);
-                        $this->connection->update($mainTable, $updateData[3], ['related_3=?' => (string) $item]);
+                        $this->getConnection()->update($mainTable, $updateData[1], ['related_1=?' => (string) $item]);
+                        $this->getConnection()->update($mainTable, $updateData[2], ['related_2=?' => (string) $item]);
+                        $this->getConnection()->update($mainTable, $updateData[3], ['related_3=?' => (string) $item]);
                     } catch (\Exception $e) {
                         $this->pandaHelper->logException($e);
                     }
@@ -708,14 +712,14 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $salesOrderTable = $this->getTable('sales_order');
         $catalogProductEntityTable = $this->getTable('catalog_product_entity');
 
-        $lastProductId = $this->connection->fetchOne("SELECT MAX(entity_id) FROM " . $catalogProductEntityTable);
+        $lastProductId = $this->getConnection()->fetchOne("SELECT MAX(entity_id) FROM " . $catalogProductEntityTable);
 
         $rowsToProcess = 1000;
         $start = 1;
         $end = false;
         $emptyCycles = 0;
         while (true) {
-            $selectTmp = $this->connection->select();
+            $selectTmp = $this->getConnection()->select();
             $selectTmp->from($salesOrderItemTable, ['created_at'])
                       ->joinInner(
                           $salesOrderTable,
@@ -726,7 +730,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                       ->where($salesOrderTable . '.customer_email = s.customer_email')
                       ->order($salesOrderItemTable . '.order_id DESC');
 
-            $select = $this->connection->select();
+            $select = $this->getConnection()->select();
             $select->from(
                 ['i' => $salesOrderItemTable],
                 [
@@ -824,7 +828,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
             $select->having('average>0');
 
-            $result = $this->connection->fetchAll($select);
+            $result = $this->getConnection()->fetchAll($select);
 
             if (count($result) == 0) {
                 $emptyCycles++;
@@ -846,7 +850,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
                 $data['avg_order'] = $entry['average'];
 
-                $this->connection->update($mainTable, $data, ['sku=?' => (string) $entry['sku']]);
+                $this->getConnection()->update($mainTable, $data, ['sku=?' => (string) $entry['sku']]);
             }
 
             if ($end || $emptyCycles > 10) {
@@ -883,7 +887,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $categoriesTableIndex = $this->getTable('catalog_category_product');
         $productsTable = $this->getTable('catalog_product_entity');
 
-        $this->connection->query(
+        $this->getConnection()->query(
             "UPDATE $mainTable r ,
                              $productsTable c
                             SET r.category_ids =(
@@ -921,7 +925,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $salesOrderItemTable = $this->getTable('sales_order_item');
         $salesOrderTable = $this->getTable('sales_order');
 
-        $this->connection->query(
+        $this->getConnection()->query(
             "UPDATE $pandaCustomersKpisTable k ,
                                  $salesOrderTable s
                                 SET k.sku_bought =(
@@ -960,15 +964,15 @@ class Relations extends \Magento\Framework\Model\AbstractModel
     public function schedule($table)
     {
 
-        $exists = $this->connection->fetchRow(
-            $this->connection->select()
-                             ->from($this->getTable('cron_schedule'))
-                             ->where('job_code=?', $table)
-                             ->where('status IN (?)', ['pending', 'running'])
+        $exists = $this->getConnection()->fetchRow(
+            $this->getConnection()->select()
+                 ->from($this->getTable('cron_schedule'))
+                 ->where('job_code=?', $table)
+                 ->where('status IN (?)', ['pending', 'running'])
         );
 
         if (!$exists) {
-            $this->connection->insert(
+            $this->getConnection()->insert(
                 $this->getTable('cron_schedule'),
                 [
                     'job_code'     => $table,
@@ -1079,11 +1083,11 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $regionsTable = $this->getTable('directory_country_region_name');
 
         if (!$date && !$segmentId) {
-            $this->connection->delete($mainTable, ['segment_id IS NULL']);
+            $this->getConnection()->delete($mainTable, ['segment_id IS NULL']);
         }
 
         if ($segmentId && !$date) {
-            $this->connection->delete($mainTable, ['segment_id IN(?)' => $segmentId]);
+            $this->getConnection()->delete($mainTable, ['segment_id IN(?)' => $segmentId]);
         }
 
         $loops = [0];
@@ -1102,25 +1106,25 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             if ($regions) {
                 $loops = $regions;
             } else {
-                $loops = $this->connection->fetchCol(
-                    $this->connection->select()
-                                     ->where('s.state NOT IN (?)', ['canceled', 'new', 'hold'])
-                                     ->where("si.parent_item_id IS NULL OR si.parent_item_id =?", 0)
-                                     ->where(
-                                         $this->getTable(
-                                             'sales_order_address'
-                                         ) . ".region_id IN (SELECT DISTINCT(region_id) FROM $regionsTable)"
-                                     )
-                                     ->from(
-                                         $this->getTable('sales_order_address'),
-                                         ["DISTINCT(TRIM(region_id))"]
-                                     )
-                                     ->join(
-                                         ['s' => $salesTable],
-                                         $this->getTable('sales_order_address') . ".parent_id = s.entity_id",
-                                         []
-                                     )
-                                     ->join(['si' => $salesItemTable], "si.order_id = s.entity_id", [])
+                $loops = $this->getConnection()->fetchCol(
+                    $this->getConnection()->select()
+                         ->where('s.state NOT IN (?)', ['canceled', 'new', 'hold'])
+                         ->where("si.parent_item_id IS NULL OR si.parent_item_id =?", 0)
+                         ->where(
+                             $this->getTable(
+                                 'sales_order_address'
+                             ) . ".region_id IN (SELECT DISTINCT(region_id) FROM $regionsTable)"
+                         )
+                         ->from(
+                             $this->getTable('sales_order_address'),
+                             ["DISTINCT(TRIM(region_id))"]
+                         )
+                         ->join(
+                             ['s' => $salesTable],
+                             $this->getTable('sales_order_address') . ".parent_id = s.entity_id",
+                             []
+                         )
+                         ->join(['si' => $salesItemTable], "si.order_id = s.entity_id", [])
                 );
             }
         }
@@ -1139,17 +1143,17 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             if ($countries) {
                 $loops = $countries;
             } else {
-                $loops = $this->connection->fetchCol(
-                    $this->connection->select()
-                                     ->where('s.state NOT IN (?)', ['canceled', 'new', 'hold'])
-                                     ->where("si.parent_item_id IS NULL OR si.parent_item_id =?", 0)
-                                     ->from($this->getTable('sales_order_address'), ['DISTINCT(country_id)'])
-                                     ->join(
-                                         ['s' => $salesTable],
-                                         $this->getTable('sales_order_address') . ".parent_id = s.entity_id",
-                                         []
-                                     )
-                                     ->join(['si' => $salesItemTable], "si.order_id = s.entity_id", [])
+                $loops = $this->getConnection()->fetchCol(
+                    $this->getConnection()->select()
+                         ->where('s.state NOT IN (?)', ['canceled', 'new', 'hold'])
+                         ->where("si.parent_item_id IS NULL OR si.parent_item_id =?", 0)
+                         ->from($this->getTable('sales_order_address'), ['DISTINCT(country_id)'])
+                         ->join(
+                             ['s' => $salesTable],
+                             $this->getTable('sales_order_address') . ".parent_id = s.entity_id",
+                             []
+                         )
+                         ->join(['si' => $salesItemTable], "si.order_id = s.entity_id", [])
                 );
             }
         }
@@ -1159,29 +1163,29 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                 'age' => new \Zend_Db_Expr('DISTINCT(' . \Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion()) . ')'),
             ];
 
-            $loops = $this->connection->fetchCol(
-                $this->connection->select()
-                                 ->where('s.state NOT IN (?)', ['canceled', 'new', 'hold'])
-                                 ->where("si.parent_item_id IS NULL OR si.parent_item_id =?", 0)
-                                 ->from($this->getTable('sales_order_address'), [])
-                                 ->join(
-                                     ['s' => $salesTable],
-                                     $this->getTable('sales_order_address') . ".parent_id = s.entity_id",
-                                     []
-                                 )
-                                 ->join(['si' => $salesItemTable], "si.order_id = s.entity_id", [])
-                                 ->joinInner(
-                                     ['k' => $this->getTable('panda_customers_kpis')],
-                                     's.customer_email = k.email_meta AND (age>18 OR predicted_age IS NOT NULL)',
-                                     $newColumns
-                                 )
+            $loops = $this->getConnection()->fetchCol(
+                $this->getConnection()->select()
+                     ->where('s.state NOT IN (?)', ['canceled', 'new', 'hold'])
+                     ->where("si.parent_item_id IS NULL OR si.parent_item_id =?", 0)
+                     ->from($this->getTable('sales_order_address'), [])
+                     ->join(
+                         ['s' => $salesTable],
+                         $this->getTable('sales_order_address') . ".parent_id = s.entity_id",
+                         []
+                     )
+                     ->join(['si' => $salesItemTable], "si.order_id = s.entity_id", [])
+                     ->joinInner(
+                         ['k' => $this->getTable('panda_customers_kpis')],
+                         's.customer_email = k.email_meta AND (age>18 OR predicted_age IS NOT NULL)',
+                         $newColumns
+                     )
             );
         }
 
         foreach ($loops as $loop) {
             $extraInsert = [];
 
-            $selectSkus = $this->connection->select();
+            $selectSkus = $this->getConnection()->select();
             $selectSkus->from(
                 ['cpe' => $catalogProductEntityTable],
                 ['sku' => 'cpe.sku', 'order_id' => new \Zend_Db_Expr('GROUP_CONCAT(soi.order_id)')]
@@ -1189,7 +1193,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                        ->joinInner(['soi' => $salesItemTable], 'soi.sku = cpe.sku', [])
                        ->group('cpe.sku');
 
-            $selectQtys = $this->connection->select();
+            $selectQtys = $this->getConnection()->select();
             $selectQtys->from(
                 ['cpe' => $catalogProductEntityTable],
                 [
@@ -1312,8 +1316,8 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $selectSkus->where('s.state NOT IN (?)', ['canceled', 'new', 'hold']);
             $selectSkus->where('soi.parent_item_id IS NULL OR soi.parent_item_id =?', 0);
 
-            $skus = $this->connection->fetchPairs($selectSkus);
-            $qtys = $this->connection->fetchPairs($selectQtys);
+            $skus = $this->getConnection()->fetchPairs($selectSkus);
+            $qtys = $this->getConnection()->fetchPairs($selectQtys);
 
             foreach ($skus as $sku => $orders) {
                 $data = [];
@@ -1361,7 +1365,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
                 $insert = array_merge($insert, $extraInsert);
 
-                $this->connection->insert($mainTable, $insert);
+                $this->getConnection()->insert($mainTable, $insert);
             }
 
             unset($qtys, $skus);
@@ -1401,11 +1405,11 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $salesTable = $this->getTable('sales_order');
 
         if (!$date && !$segmentIds) {
-            $this->connection->delete($mainTable, ['segment_id IS NULL']);
+            $this->getConnection()->delete($mainTable, ['segment_id IS NULL']);
         }
 
         if ($segmentIds && !$date) {
-            $this->connection->delete($mainTable, ['segment_id IN(?)' => $segmentIds]);
+            $this->getConnection()->delete($mainTable, ['segment_id IN(?)' => $segmentIds]);
         }
 
         $attributesConfig = $this->scopeConfig->getValue(
@@ -1426,7 +1430,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             foreach ($skus as $sku) {
                 $insertGroup = false;
 
-                $select = $this->connection->select();
+                $select = $this->getConnection()->select();
 
                 $select->join(['e' => $this->getTable('catalog_product_entity')], "e.sku = a.sku", []);
                 $col = $this->productFactory->create()
@@ -1461,7 +1465,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
                 $select->columns(['total' => new \Zend_Db_Expr("SUM(a.qty_invoiced)")]);
 
-                $subSelect = $this->connection->select();
+                $subSelect = $this->getConnection()->select();
                 $subSelect->from(['a1' => $salesItemTable], ['order_id'])
                           ->where($keyName . '.value=?', (string) $sku);
                 $subSelect->where($keyName . '.value IS NOT NULL');
@@ -1556,7 +1560,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
                 #$select->limit(self::NUMBER_PRODUCTS_RELATED);
 
-                $result = $this->connection->fetchAll($select);
+                $result = $this->getConnection()->fetchAll($select);
 
                 if (!$result) {
                     continue;
@@ -1582,12 +1586,12 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     continue;
                 }
 
-                $metadata['total'] = $this->connection->fetchOne(
-                    $this->connection->select()
-                                     ->from($salesItemTable, [new \Zend_Db_Expr('SUM(qty_invoiced)')])
-                                     ->where('s.state NOT IN (?)', ['canceled', 'new', 'hold'])
-                                     ->joinInner(['s' => $salesTable], 's.entity_id = order_id ', [])
-                                     ->where('sku=?', (string) $sku)
+                $metadata['total'] = $this->getConnection()->fetchOne(
+                    $this->getConnection()->select()
+                         ->from($salesItemTable, [new \Zend_Db_Expr('SUM(qty_invoiced)')])
+                         ->where('s.state NOT IN (?)', ['canceled', 'new', 'hold'])
+                         ->joinInner(['s' => $salesTable], 's.entity_id = order_id ', [])
+                         ->where('sku=?', (string) $sku)
                 );
 
                 $i = 1;
@@ -1634,7 +1638,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                 $segmentsToInsert = array_unique($segmentsToInsert);
 
                 if ($date) {
-                    $this->connection->delete($mainTable, ['sku =?' => (string) $sku]);
+                    $this->getConnection()->delete($mainTable, ['sku =?' => (string) $sku]);
                 }
 
                 if ($insertGroup) {
@@ -1646,7 +1650,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                             $values['attribute_code'] = $metadata['attribute_code'];
                             $values[$insertGroup] = $fieldName;
 
-                            $this->connection->insert($mainTable, $values);
+                            $this->getConnection()->insert($mainTable, $values);
                         }
                     }
                 } else {
@@ -1659,7 +1663,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
                         $data = array_merge($data, $metadata['seg'][$segmentId]);
 
-                        $this->connection->insert($mainTable, $data);
+                        $this->getConnection()->insert($mainTable, $data);
                     }
                 }
             }
@@ -1684,7 +1688,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
     public function getDistinctAttributesValues($attributeCode)
     {
 
-        $select = $this->connection->select();
+        $select = $this->getConnection()->select();
 
         $select->from(['ea' => $this->getTable('eav_attribute')], [])
                ->joinLeft(['eao' => $this->getTable('eav_attribute_option')], 'eao.attribute_id = ea.attribute_id', [])
@@ -1696,7 +1700,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                ->where('ea.attribute_code =?', $attributeCode)
                ->where('eaov.store_id = 0');
 
-        return $this->connection->fetchPairs($select);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**
@@ -1716,12 +1720,12 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
         $attributes = explode(',', $attributes);
 
-        $select = $this->connection->select();
+        $select = $this->getConnection()->select();
 
         $select->from(['ea' => $this->getTable('eav_attribute')], ['attribute_code', 'frontend_label'])
                ->where('ea.attribute_code IN(?)', $attributes);
 
-        return $this->connection->fetchPairs($select);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**
@@ -1762,10 +1766,10 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             }
 
             foreach ($ages as $age) {
-                $select = $this->connection->select()
-                                           ->from($tableName)
-                                           ->where('sku=?', (string) $sku)
-                                           ->order($order);
+                $select = $this->getConnection()->select()
+                               ->from($tableName)
+                               ->where('sku=?', (string) $sku)
+                               ->order($order);
 
                 if (in_array($type, $auxFields) && $age !== 0) {
                     if ($type == 'regions') {
@@ -1786,7 +1790,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     $select->where('attribute_code=?', $attributeCode);
                 }
 
-                $collection[$type][$sku][$age] = $this->connection->fetchRow($select);
+                $collection[$type][$sku][$age] = $this->getConnection()->fetchRow($select);
             }
         }
 
@@ -1825,10 +1829,10 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $tableName = $this->getTable(self::PRODUCTS_RECOMMENDATIONS_TABLE_PREFIX . $type);
 
             foreach ($ages as $age) {
-                $select = $this->connection->select()
-                                           ->from($tableName)
-                                           ->where('sku=?', (string) $sku)
-                                           ->order($order);
+                $select = $this->getConnection()->select()
+                               ->from($tableName)
+                               ->where('sku=?', (string) $sku)
+                               ->order($order);
 
                 if (in_array($type, $auxFields) && $age !== 0) {
                     if ($type == 'regions') {
@@ -1842,7 +1846,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     $select->where($fieldSelect . '=?', $age);
                 }
 
-                $collection[$type][$sku][$age] = $this->connection->fetchRow($select);
+                $collection[$type][$sku][$age] = $this->getConnection()->fetchRow($select);
             }
         }
 
@@ -1872,9 +1876,9 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $type = 'global';
         }
 
-        $maxColumns = $this->connection->fetchOne(
-            $this->connection->select()
-                             ->from($this->getTable('sales_order'), ['MAX(total_item_count)'])
+        $maxColumns = $this->getConnection()->fetchOne(
+            $this->getConnection()->select()
+                 ->from($this->getTable('sales_order'), ['MAX(total_item_count)'])
         );
 
         if ($maxColumns > self::NUMBER_PRODUCTS_RELATED) {
@@ -1896,22 +1900,22 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             }
 
             $sku = reset($skus);
-            $row[$sku] = $this->connection->fetchRow(
-                $this->connection->select()
-                                 ->from($tableName)
-                                 ->where('sku=?', (string) $sku)
-                                 ->where('segment_id IS NULL')
+            $row[$sku] = $this->getConnection()->fetchRow(
+                $this->getConnection()->select()
+                     ->from($tableName)
+                     ->where('sku=?', (string) $sku)
+                     ->where('segment_id IS NULL')
             );
 
             if ($row[$sku]) {
                 for ($i = 1; $i <= 4; $i++) {
                     if ($row[$sku]['related_' . $i]) {
-                        $select = $this->connection->select()
-                                                   ->from($tableName)
-                                                   ->where('sku=?', (string) $row[$sku]['related_' . $i])
-                                                   ->where('segment_id IS NULL');
+                        $select = $this->getConnection()->select()
+                                       ->from($tableName)
+                                       ->where('sku=?', (string) $row[$sku]['related_' . $i])
+                                       ->where('segment_id IS NULL');
 
-                        $row[$row[$sku]['related_' . $i]] = $this->connection->fetchRow($select);
+                        $row[$row[$sku]['related_' . $i]] = $this->getConnection()->fetchRow($select);
                     }
                 }
             }
@@ -1931,15 +1935,15 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         }
 
         $startMySQL = $this->pandaHelper->gmtDate();
-        $exists = $this->connection->fetchRow(
-            $this->connection->select()
-                             ->from($vennHistoryTable, ['data', 'item_id'])
-                             ->where('identifier=?', $identifier)
-                             ->where('updated_at >=  ? - INTERVAL 1 DAY ', $startMySQL)
+        $exists = $this->getConnection()->fetchRow(
+            $this->getConnection()->select()
+                 ->from($vennHistoryTable, ['data', 'item_id'])
+                 ->where('identifier=?', $identifier)
+                 ->where('updated_at >=  ? - INTERVAL 1 DAY ', $startMySQL)
         );
 
         if ($exists) {
-            $this->connection->update(
+            $this->getConnection()->update(
                 $vennHistoryTable,
                 ['views' => new \Zend_Db_Expr('views + 1 ')],
                 ['item_id=?' => $exists['item_id']]
@@ -1984,9 +1988,9 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             }
             foreach ($collect as $list) {
                 foreach ($subTypes as $age) {
-                    $select = $this->connection->select()
-                                               ->from($tableVennName, ['COUNT(*)'])
-                                               ->order($order);
+                    $select = $this->getConnection()->select()
+                                   ->from($tableVennName, ['COUNT(*)'])
+                                   ->order($order);
 
                     $tempFields = implode(',', $fields);
 
@@ -2020,7 +2024,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                         $select->where('attribute_code=?', $attributeCode);
                     }
 
-                    $total = $this->connection->fetchOne($select);
+                    $total = $this->getConnection()->fetchOne($select);
 
                     if ($total == 0) {
                         continue;
@@ -2031,14 +2035,14 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             }
         }
 
-        $execution = $this->connection->fetchOne(
+        $execution = $this->getConnection()->fetchOne(
             "SELECT TIMESTAMPDIFF(SECOND,'$startMySQL',?)",
             $this->pandaHelper->gmtDate()
         );
 
         $result = ['data' => $values, 'skus' => $final, 'execution' => $execution];
 
-        $this->connection->insert(
+        $this->getConnection()->insert(
             $vennHistoryTable,
             [
                 'identifier' => $identifier,
@@ -2073,11 +2077,11 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $table = $this->getTable(self::PRODUCTS_VENN_TABLE_PREFIX_ATTRS . $type);
         }
 
-        $select = $this->connection->select()
-                                   ->from(
-                                       $table,
-                                       ["DISTINCT({$this->connection->quoteIdentifier($field)})"]
-                                   );
+        $select = $this->getConnection()->select()
+                       ->from(
+                           $table,
+                           ["DISTINCT({$this->getConnection()->quoteIdentifier($field)})"]
+                       );
 
         if ($segmentId) {
             $select->where('segment_id=?', $segmentId);
@@ -2085,7 +2089,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
         $select->order($field);
 
-        return $this->connection->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
@@ -2136,16 +2140,16 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $tableName = $this->getTable(self::PRODUCTS_RELATIONS_TABLE_PREFIX_ATTRS . $type);
         }
 
-        $days = $this->connection->fetchCol(
-            $this->connection->select()
-                             ->from($tableName, [])
-                             ->columns(
-                                 [
-                                     'distinct' => new \Zend_Db_Expr("DISTINCT($field)"),
-                                 ]
-                             )
-                             ->where('sku = ?', $sku)
-                             ->order($field)
+        $days = $this->getConnection()->fetchCol(
+            $this->getConnection()->select()
+                 ->from($tableName, [])
+                 ->columns(
+                     [
+                         'distinct' => new \Zend_Db_Expr("DISTINCT($field)"),
+                     ]
+                 )
+                 ->where('sku = ?', $sku)
+                 ->order($field)
         );
 
         return $days;
@@ -2175,21 +2179,21 @@ class Relations extends \Magento\Framework\Model\AbstractModel
             $tableName = $this->getTable(self::PRODUCTS_RELATIONS_TABLE_PREFIX_ATTRS . $type);
         }
 
-        $fieldIdent = $this->connection->quoteIdentifier($field);
-        $select = $this->connection->select()
-                                   ->from($tableName, [])
-                                   ->columns(
-                                       [
-                                           'distinct' => new \Zend_Db_Expr("DISTINCT($fieldIdent)"),
-                                       ]
-                                   )
-                                   ->order($field);
+        $fieldIdent = $this->getConnection()->quoteIdentifier($field);
+        $select = $this->getConnection()->select()
+                       ->from($tableName, [])
+                       ->columns(
+                           [
+                               'distinct' => new \Zend_Db_Expr("DISTINCT($fieldIdent)"),
+                           ]
+                       )
+                       ->order($field);
 
         if ($attributes) {
             $select->where('attribute_code=?', $attributeCode);
         }
 
-        $days = $this->connection->fetchCol($select);
+        $days = $this->getConnection()->fetchCol($select);
 
         return $days;
     }
@@ -2289,11 +2293,11 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $salesTable = $this->getTable('sales_order');
 
         if (!$date && !$segmentId) {
-            $this->connection->delete($mainTable, ['segment_id IS NULL']);
+            $this->getConnection()->delete($mainTable, ['segment_id IS NULL']);
         }
 
         if ($segmentId && !$date) {
-            $this->connection->delete($mainTable, ['segment_id=?' => $segmentId]);
+            $this->getConnection()->delete($mainTable, ['segment_id=?' => $segmentId]);
         }
 
         $attributesLoop = [0];
@@ -2311,7 +2315,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         }
 
         foreach ($attributesLoop as $attributeCode) {
-            $select = $this->connection->select();
+            $select = $this->getConnection()->select();
             $select->reset()
                    ->from(['a' => $invoiceItemTable], ['total' => 'COUNT(*)'])
                    ->joinInner(['si' => $salesInvoiceTable], 'a.parent_id = si.entity_id', [])
@@ -2439,7 +2443,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                 $select->columns(['sku' => 'GROUP_CONCAT(a.sku)']);
             }
 
-            $result = $this->connection->fetchAll($select);
+            $result = $this->getConnection()->fetchAll($select);
 
             if (!$result) {
                 continue;
@@ -2480,7 +2484,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     $i++;
                 }
 
-                $this->connection->insert($mainTable, $data);
+                $this->getConnection()->insert($mainTable, $data);
             }
         }
 
@@ -2533,7 +2537,7 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                 AND a.attribute_code = 'name' 
                 AND t.entity_type_code = 'catalog_product'";
 
-        return $this->connection->fetchOne($sql, (string) $sku);
+        return $this->getConnection()->fetchOne($sql, (string) $sku);
     }
 
     /**

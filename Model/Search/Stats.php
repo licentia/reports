@@ -140,13 +140,21 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         $this->segmentsCollectionFactory = $segmentsCollectionFactory;
         $this->pandaHelper = $pandaHelper;
         $this->scopeConfig = $scopeConfigInterface;
-        $this->connection = $segmentsCollectionFactory->create()->getResource()->getConnection();
         $this->salesStats = $statsFactory;
 
-        $this->pandaHelper->getConnection()
-                          ->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+//        $this->pandaHelper->getConnection()
+//                          ->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
 
         $this->minSearchNumber = $this->scopeConfig->getValue('panda_equity/reports/search');
+    }
+
+    /**
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getConnection()
+    {
+
+        return $this->pandaHelper->getConnection();
     }
 
     /**
@@ -190,17 +198,17 @@ class Stats extends \Magento\Framework\Model\AbstractModel
             $tableName = $this->getTable('panda_search_relations_' . $type);
 
             foreach ($ages as $age) {
-                $select = $this->connection->select()
-                                           ->from($tableName)
-                                           ->where('query=?', (string) $sku)
-                                           ->where('segment_id IS NULL')
-                                           ->order($order);
+                $select = $this->getConnection()->select()
+                               ->from($tableName)
+                               ->where('query=?', (string) $sku)
+                               ->where('segment_id IS NULL')
+                               ->order($order);
 
                 if (in_array($type, $auxFields) && $age !== 0) {
                     $select->where($type . '=?', $age);
                 }
                 try {
-                    $collection[$type][$sku][$age] = $this->connection->fetchRow($select);
+                    $collection[$type][$sku][$age] = $this->getConnection()->fetchRow($select);
                 } catch (\Exception $e) {
                 }
             }
@@ -223,11 +231,11 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         $tableName = $this->getTable('panda_search_performance_' . $type);
 
-        $select = $this->connection->select()
-                                   ->from($tableName, ['text' => 'query', 'weight' => new \Zend_Db_Expr('SUM(total)')])
-                                   ->group('query')
-                                   ->order('query')
-                                   ->limit(2000);
+        $select = $this->getConnection()->select()
+                       ->from($tableName, ['text' => 'query', 'weight' => new \Zend_Db_Expr('SUM(total)')])
+                       ->group('query')
+                       ->order('query')
+                       ->limit(2000);
 
         if ($field) {
             $select->where($type . '=?', $field);
@@ -247,7 +255,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         }
 
         try {
-            $collection = $this->connection->fetchAll($select);
+            $collection = $this->getConnection()->fetchAll($select);
         } catch (\Exception $e) {
         }
 
@@ -262,10 +270,10 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     public function countryExists($country)
     {
 
-        return $this->connection->fetchOne(
-            $this->connection->select()
-                             ->from($this->getTable('panda_search_relations_country'), ['country'])
-                             ->where('country=?', $country)
+        return $this->getConnection()->fetchOne(
+            $this->getConnection()->select()
+                 ->from($this->getTable('panda_search_relations_country'), ['country'])
+                 ->where('country=?', $country)
         );
     }
 
@@ -277,10 +285,10 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     public function regionExists($region)
     {
 
-        return $this->connection->fetchOne(
-            $this->connection->select()
-                             ->from($this->getTable('panda_search_relations_region'), ['region'])
-                             ->where('region=?', $region)
+        return $this->getConnection()->fetchOne(
+            $this->getConnection()->select()
+                 ->from($this->getTable('panda_search_relations_region'), ['region'])
+                 ->where('region=?', $region)
         );
     }
 
@@ -306,22 +314,22 @@ class Stats extends \Magento\Framework\Model\AbstractModel
             $tableName = $this->getTable('panda_search_relations_' . $type);
 
             $sku = reset($skus);
-            $row[$sku] = $this->connection->fetchRow(
-                $this->connection->select()
-                                 ->from($tableName)
-                                 ->where('query=?', (string) $sku)
-                                 ->where('segment_id IS NULL')
+            $row[$sku] = $this->getConnection()->fetchRow(
+                $this->getConnection()->select()
+                     ->from($tableName)
+                     ->where('query=?', (string) $sku)
+                     ->where('segment_id IS NULL')
             );
 
             if ($row[$sku]) {
                 for ($i = 1; $i <= 4; $i++) {
                     if ($row[$sku]['related_' . $i]) {
-                        $select = $this->connection->select()
-                                                   ->from($tableName)
-                                                   ->where('query=?', (string) $row[$sku]['related_' . $i])
-                                                   ->where('segment_id IS NULL');
+                        $select = $this->getConnection()->select()
+                                       ->from($tableName)
+                                       ->where('query=?', (string) $row[$sku]['related_' . $i])
+                                       ->where('segment_id IS NULL');
 
-                        $row[$row[$sku]['related_' . $i]] = $this->connection->fetchRow($select);
+                        $row[$row[$sku]['related_' . $i]] = $this->getConnection()->fetchRow($select);
                     }
                 }
             }
@@ -342,18 +350,18 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         $startMySQL = $this->pandaHelper->gmtDate();
 
-        $exists = $this->connection->fetchRow(
-            $this->connection->select()
-                             ->from($vennHistoryTable, ['data', 'item_id'])
-                             ->where('identifier=?', $identifier)
-                             ->where(
-                                 'updated_at >= ? - INTERVAL 1 DAY ',
-                                 $this->pandaHelper->gmtDate()
-                             )
+        $exists = $this->getConnection()->fetchRow(
+            $this->getConnection()->select()
+                 ->from($vennHistoryTable, ['data', 'item_id'])
+                 ->where('identifier=?', $identifier)
+                 ->where(
+                     'updated_at >= ? - INTERVAL 1 DAY ',
+                     $this->pandaHelper->gmtDate()
+                 )
         );
 
         if ($exists) {
-            $this->connection->update(
+            $this->getConnection()->update(
                 $vennHistoryTable,
                 ['views' => new \Zend_Db_Expr('views + 1 ')],
                 ['item_id=?' => $exists['item_id']]
@@ -395,9 +403,9 @@ class Stats extends \Magento\Framework\Model\AbstractModel
             }
             foreach ($collect as $list) {
                 foreach ($subTypes as $age) {
-                    $select = $this->connection->select()
-                                               ->from($tableVennName, ['COUNT(*)'])
-                                               ->order($order);
+                    $select = $this->getConnection()->select()
+                                   ->from($tableVennName, ['COUNT(*)'])
+                                   ->order($order);
 
                     $tempFields = implode(',', $fields);
 
@@ -424,7 +432,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                     }
 
                     try {
-                        $total = $this->connection->fetchOne($select);
+                        $total = $this->getConnection()->fetchOne($select);
                     } catch (\Exception $e) {
                     }
 
@@ -437,14 +445,14 @@ class Stats extends \Magento\Framework\Model\AbstractModel
             }
         }
 
-        $execution = $this->connection->fetchOne(
+        $execution = $this->getConnection()->fetchOne(
             "SELECT TIMESTAMPDIFF(SECOND,'$startMySQL',?)",
             $this->pandaHelper->gmtDate()
         );
 
         $result = ['data' => $values, 'skus' => $final, 'execution' => $execution];
 
-        $this->connection->insert(
+        $this->getConnection()->insert(
             $vennHistoryTable,
             [
                 'identifier' => $identifier,
@@ -477,11 +485,11 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         $table = $this->getTable('panda_search_relations_' . $type);
 
-        $select = $this->connection->select()
-                                   ->from(
-                                       $table,
-                                       ["DISTINCT({$this->connection->quoteIdentifier($type)})"]
-                                   );
+        $select = $this->getConnection()->select()
+                       ->from(
+                           $table,
+                           ["DISTINCT({$this->getConnection()->quoteIdentifier($type)})"]
+                       );
         $fields = [];
         if ($queries) {
             foreach (range(1, 50) as $number) {
@@ -499,7 +507,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         $select->order($type);
 
-        return $this->connection->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
@@ -537,16 +545,16 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         $tableName = $this->getTable('panda_search_relations_' . $type);
 
-        $days = $this->connection->fetchCol(
-            $this->connection->select()
-                             ->from($tableName, [])
-                             ->columns(
-                                 [
-                                     'distinct' => new \Zend_Db_Expr("DISTINCT($type)"),
-                                 ]
-                             )
-                             ->where('query = ?', $sku)
-                             ->order($type)
+        $days = $this->getConnection()->fetchCol(
+            $this->getConnection()->select()
+                 ->from($tableName, [])
+                 ->columns(
+                     [
+                         'distinct' => new \Zend_Db_Expr("DISTINCT($type)"),
+                     ]
+                 )
+                 ->where('query = ?', $sku)
+                 ->order($type)
         );
 
         return $days;
@@ -563,16 +571,16 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         $tableName = $this->getTable('panda_search_venn_' . $type);
 
-        $select = $this->connection->select()
-                                   ->from($tableName, [])
-                                   ->columns(
-                                       [
-                                           'distinct' => new \Zend_Db_Expr("DISTINCT($field)"),
-                                       ]
-                                   )
-                                   ->order($field);
+        $select = $this->getConnection()->select()
+                       ->from($tableName, [])
+                       ->columns(
+                           [
+                               'distinct' => new \Zend_Db_Expr("DISTINCT($field)"),
+                           ]
+                       )
+                       ->order($field);
 
-        $days = $this->connection->fetchCol($select);
+        $days = $this->getConnection()->fetchCol($select);
 
         return $days;
     }
@@ -850,11 +858,11 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         $searchMetadata = $this->getTable('panda_segments_metadata_searches');
 
         if (!$segmentId) {
-            $this->connection->delete($mainTable, ['segment_id IS NULL']);
+            $this->getConnection()->delete($mainTable, ['segment_id IS NULL']);
         }
 
         if ($segmentId) {
-            $this->connection->delete($mainTable, ['segment_id=?' => $segmentId]);
+            $this->getConnection()->delete($mainTable, ['segment_id=?' => $segmentId]);
         }
 
         $loops = [0];
@@ -892,7 +900,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
             if ($regions) {
                 $loops = $regions;
             } else {
-                $select = $this->connection->select();
+                $select = $this->getConnection()->select();
 
                 $select->from(['s' => $searchMetadata], []);
                 $select->joinInner(['o' => $salesTable], 's.email = o.customer_email', []);
@@ -902,7 +910,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                     ["DISTINCT(region_id)"]
                 );
 
-                $loops = $this->connection->fetchCol($select);
+                $loops = $this->getConnection()->fetchCol($select);
 
                 $loops = array_filter($loops);
             }
@@ -919,7 +927,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
             if ($countries) {
                 $loops = $countries;
             } else {
-                $select = $this->connection->select();
+                $select = $this->getConnection()->select();
 
                 $select->from(['s' => $searchMetadata], []);
                 $select->joinInner(['o' => $salesTable], 's.email = o.customer_email', []);
@@ -929,26 +937,26 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                     ['DISTINCT(country_id)']
                 );
 
-                $loops = $this->connection->fetchCol($select);
+                $loops = $this->getConnection()->fetchCol($select);
 
                 $loops = array_filter($loops);
             }
         }
 
-        $selectQueries = $this->connection->select()
-                                          ->from($searchMetadata, ['query'])
-                                          ->group('query')
-                                          ->order('count(*) DESC');
+        $selectQueries = $this->getConnection()->select()
+                              ->from($searchMetadata, ['query'])
+                              ->group('query')
+                              ->order('count(*) DESC');
 
         if ($this->minSearchNumber) {
             $selectQueries->having('count(*) > ?', $this->minSearchNumber);
         }
 
-        $queries = $this->connection->fetchCol($selectQueries);
+        $queries = $this->getConnection()->fetchCol($selectQueries);
 
         foreach ($queries as $query) {
             foreach ($loops as $loop) {
-                $select = $this->connection->select();
+                $select = $this->getConnection()->select();
                 $select->from(['s' => $searchMetadata], ['total' => 'COUNT(*)', 'query']);
 
                 $select->where('s.query!=?', $query);
@@ -1014,7 +1022,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                 $select->order('COUNT(*) DESC');
                 $select->limit(50);
 
-                $result = $this->connection->fetchAll($select);
+                $result = $this->getConnection()->fetchAll($select);
 
                 if (!$result) {
                     continue;
@@ -1027,10 +1035,10 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                 }
 
                 $data['query'] = $query;
-                $data['total'] = $this->connection->fetchOne(
-                    $this->connection->select()
-                                     ->from($searchMetadata, [new \Zend_Db_Expr('COUNT(*)')])
-                                     ->where('query=?', (string) $query)
+                $data['total'] = $this->getConnection()->fetchOne(
+                    $this->getConnection()->select()
+                         ->from($searchMetadata, [new \Zend_Db_Expr('COUNT(*)')])
+                         ->where('query=?', (string) $query)
                 );
 
                 if (array_key_exists('age', $result[0])) {
@@ -1051,7 +1059,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                     $i++;
                 }
 
-                $this->connection->insert($mainTable, $data);
+                $this->getConnection()->insert($mainTable, $data);
             }
         }
 
@@ -1086,11 +1094,11 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         $searchMetadata = $this->getTable('panda_segments_metadata_searches');
 
         if (!$segmentId) {
-            $this->connection->delete($mainTable, ['segment_id IS NULL']);
+            $this->getConnection()->delete($mainTable, ['segment_id IS NULL']);
         }
 
         if ($segmentId) {
-            $this->connection->delete($mainTable, ['segment_id=?' => $segmentId]);
+            $this->getConnection()->delete($mainTable, ['segment_id=?' => $segmentId]);
         }
 
         $loops = [0];
@@ -1110,9 +1118,9 @@ class Stats extends \Magento\Framework\Model\AbstractModel
             if ($regions) {
                 $loops = $regions;
             } else {
-                $select = $this->connection->select();
+                $select = $this->getConnection()->select();
                 $select->from($tableValues, ['DISTINCT(region)']);
-                $loops = $this->connection->fetchCol($select);
+                $loops = $this->getConnection()->fetchCol($select);
                 $loops = array_filter($loops);
             }
         }
@@ -1128,9 +1136,9 @@ class Stats extends \Magento\Framework\Model\AbstractModel
             if ($countries) {
                 $loops = $countries;
             } else {
-                $select = $this->connection->select();
+                $select = $this->getConnection()->select();
                 $select->from($tableValues, ['DISTINCT(country)']);
-                $loops = $this->connection->fetchCol($select);
+                $loops = $this->getConnection()->fetchCol($select);
                 $loops = array_filter($loops);
             }
         }
@@ -1151,7 +1159,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         }
 
         foreach ($loops as $loop) {
-            $select = $this->connection->select();
+            $select = $this->getConnection()->select();
             $select->from(['s' => $searchMetadata], ['total' => 'COUNT(*)', 'query'])
                    ->joinInner(['b' => $searchMetadata], 's.email = b.email', []);
 
@@ -1216,7 +1224,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
             $select->columns(['query' => 'GROUP_CONCAT(DISTINCT(b.query))']);
 
-            $result = $this->connection->fetchAll($select);
+            $result = $this->getConnection()->fetchAll($select);
 
             if (!$result) {
                 continue;
@@ -1254,7 +1262,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                     $i++;
                 }
 
-                $this->connection->insert($mainTable, $data);
+                $this->getConnection()->insert($mainTable, $data);
             }
         }
 
@@ -1312,13 +1320,13 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         $table = $this->getTable('panda_search_performance_country');
 
-        $select = $this->connection->select()->from($table, ['country'])->distinct();
+        $select = $this->getConnection()->select()->from($table, ['country'])->distinct();
 
         if ($query) {
             $select->where('query=?', $query);
         }
 
-        return $this->connection->fetchCol($select);
+        return $this->getConnection()->fetchCol($select);
     }
 
     /**
@@ -1331,13 +1339,13 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         $table = $this->getTable('panda_search_performance_age');
 
-        $select = $this->connection->select()->from($table, ['age', 'age'])->distinct();
+        $select = $this->getConnection()->select()->from($table, ['age', 'age'])->distinct();
 
         if ($query) {
             $select->where('query=?', $query);
         }
 
-        return $this->connection->fetchPairs($select);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**
@@ -1350,15 +1358,15 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         $table = $this->getTable('panda_search_performance_region');
 
-        $select = $this->connection->select()
-                                   ->from($table, ['region', new \Zend_Db_Expr("CONCAT(region,' - ',country)")])
-                                   ->distinct();
+        $select = $this->getConnection()->select()
+                       ->from($table, ['region', new \Zend_Db_Expr("CONCAT(region,' - ',country)")])
+                       ->distinct();
 
         if ($query) {
             $select->where('query=?', $query);
         }
 
-        return $this->connection->fetchpairs($select);
+        return $this->getConnection()->fetchpairs($select);
     }
 
     /**
@@ -1407,10 +1415,10 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     {
 
         if ($type == 'age') {
-            $totalAges = $this->connection->fetchCol(
-                $this->connection->select()
-                                 ->from($this->getTable('panda_customers_kpis'), ['age'])
-                                 ->distinct()
+            $totalAges = $this->getConnection()->fetchCol(
+                $this->getConnection()->select()
+                     ->from($this->getTable('panda_customers_kpis'), ['age'])
+                     ->distinct()
             );
 
             array_filter($totalAges);
@@ -1421,11 +1429,11 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($type == 'female' || $type == 'male') {
-            $totalGender = $this->connection->fetchOne(
-                $this->connection->select()
-                                 ->from($this->getTable('panda_customers_kpis'))
-                                 ->where('gender=?', $type)
-                                 ->limit(1)
+            $totalGender = $this->getConnection()->fetchOne(
+                $this->getConnection()->select()
+                     ->from($this->getTable('panda_customers_kpis'))
+                     ->where('gender=?', $type)
+                     ->limit(1)
             );
 
             if (!$totalGender) {

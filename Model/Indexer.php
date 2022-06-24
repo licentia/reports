@@ -97,11 +97,6 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
     protected $_eventObject = 'panda_indexer_state';
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected $connection;
-
-    /**
      * @var \Licentia\Reports\Helper\Data
      */
     protected $pandaHelper;
@@ -149,7 +144,6 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
 
         $this->pandaHelper = $pandaHelper;
-        $this->connection = $this->getResource()->getConnection();
 
         $this->indexers['equity'] = $equity;
         $this->indexers['reorders'] = $expectedReOrdersFactory;
@@ -161,6 +155,15 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
         $this->indexers['segments'] = $segmentsFactory;
         $this->indexers['search_performance'] = $searchFactory;
         $this->indexers['search_history'] = $searchHistoryFactory;
+    }
+
+    /**
+     * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getConnection()
+    {
+
+        return $this->getResource()->getConnection();
     }
 
     /**
@@ -203,7 +206,7 @@ class Indexer extends \Magento\Framework\Model\AbstractModel
         $indexer = parent::load($modelId);
 
         if (!$indexer->getId() || $indexer->getId() != $modelId) {
-            $this->connection->insert(
+            $this->getConnection()->insert(
                 $this->getResource()->getMainTable(),
                 [
                     'indexer_id' => $modelId,
