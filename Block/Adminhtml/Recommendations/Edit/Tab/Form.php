@@ -211,8 +211,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'text',
                 [
                     'name'     => 'skus',
-                    'label'    => __('Skus'),
-                    'title'    => __('Skus'),
+                    'label'    => __('SKUs'),
+                    'title'    => __('SKUs'),
                     'note'     => __('Separate multiples with a comma , '),
                     "required" => true,
                 ]

@@ -40,7 +40,7 @@ class Pricesvariationsgroups extends \Magento\Backend\Block\Widget\Grid\Containe
         $this->buttonList->add(
             'variations',
             [
-                "label"   => __("Back to Prices Variations"),
+                "label"   => __("Back to Price Variations"),
                 "class"   => 'back',
                 "onclick" => " window.location='$location'",
             ]

@@ -261,10 +261,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 break;
             case 'relations':
             case 'performance':
-                return __('Daily udate for previous day @1:30am<br>FULL rebuild every monday @1:30am');
+                return __('Daily update for previous day @1:30am<br>FULL rebuild every monday @1:30am');
                 break;
             case 'recommendations':
-                return __('Daily udate for previous day @1:30am<br>FULL rebuild every monday @6:00am');
+                return __('Daily update for previous day @1:30am<br>FULL rebuild every monday @6:00am');
                 break;
             case 'search_performance':
                 return __('FULL rebuild every monday @2:20am');

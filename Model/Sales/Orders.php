@@ -768,7 +768,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel
         return [
             'date'    => 'Day',
             'day'     => 'Day of Month',
-            'weekday' => 'Week Day',
+            'weekday' => 'Weekday',
             'month'   => 'Month',
             'year'    => 'Year',
         ];

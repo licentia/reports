@@ -310,7 +310,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->addColumn(
                 'period_weekday',
                 [
-                    'header'           => __('Week Day'),
+                    'header'           => __('Weekday'),
                     'index'            => 'weekday',
                     'type'             => 'options',
                     'options'          => $this->getWeekDays(),

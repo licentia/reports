@@ -65,7 +65,7 @@ class View extends \Magento\Backend\Block\Template
         'date'                                   => 'Date',
         'day'                                    => 'Day',
         'day_year'                               => 'Day of Year',
-        'weekday'                                => 'Week Day',
+        'weekday'                                => 'Weekday',
         'gender'                                 => 'Gender',
         'region'                                 => 'Region',
         'year'                                   => 'Year',
@@ -772,7 +772,7 @@ class View extends \Magento\Backend\Block\Template
 
         switch ($this->getGroup()) {
             case 'weekday':
-                $title = 'Week Day';
+                $title = 'Weekday';
                 break;
             case 'day':
                 $title = 'Day';

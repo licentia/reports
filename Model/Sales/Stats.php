@@ -1085,7 +1085,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         return [
             'date'       => '-None-',
             'day'        => 'Day Month',
-            'weekday'    => 'Week Day',
+            'weekday'    => 'Weekday',
             'month'      => 'Month',
             'year'       => 'Year',
             'year_month' => 'Year/Month',
