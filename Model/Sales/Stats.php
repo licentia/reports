@@ -626,7 +626,8 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         $pandaSegmentsRecordsTable = $resource->getTable('panda_segments_records');
         $pandaSalesAddressTable = $resource->getTable('sales_order_address');
 
-        if ($type == 'attribute') {
+        if ($type == 'attribute' && $this->scopeConfig->getValue('panda_equity/reports/attributes',
+                ScopeInterface::SCOPE_WEBSITE)) {
             $loopAttrs = explode(
                 ',',
                 $this->scopeConfig->getValue('panda_equity/reports/attributes', ScopeInterface::SCOPE_WEBSITE)
@@ -1104,7 +1105,10 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     public function getTypes()
     {
 
-        $types = explode(',', $this->scopeConfig->getValue('panda_equity/reports/types'));
+        $types = [];
+        if ($this->scopeConfig->getValue('panda_equity/reports/types')) {
+            $types = explode(',', $this->scopeConfig->getValue('panda_equity/reports/types'));
+        }
         $types = array_flip($types);
 
         return array_intersect_key(\Licentia\Reports\Model\Source\ReportTypes::PANDA_REPORT_TYPES, $types);

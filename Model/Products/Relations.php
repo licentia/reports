@@ -391,16 +391,19 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     ['country' => 'country_id']
                 );
 
-                $countries = array_filter(
-                    explode(
-                        ',',
-                        $this->scopeConfig->getValue(
-                            'panda_equity/reports/country',
-                            ScopeInterface::SCOPE_WEBSITE
-                        )
-                    )
-                );
+                $countries = [];
 
+                if ($this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)) {
+                    $countries = array_filter(
+                        explode(
+                            ',',
+                            $this->scopeConfig->getValue(
+                                'panda_equity/reports/country',
+                                ScopeInterface::SCOPE_WEBSITE
+                            )
+                        )
+                    );
+                }
                 if ($countries) {
                     $select->where('ad.country_id IN (?)', $countries);
                 }
