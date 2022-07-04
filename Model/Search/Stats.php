@@ -142,8 +142,8 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         $this->scopeConfig = $scopeConfigInterface;
         $this->salesStats = $statsFactory;
 
-//        $this->pandaHelper->getConnection()
-//                          ->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+        //        $this->pandaHelper->getConnection()
+        //                          ->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
 
         $this->minSearchNumber = $this->scopeConfig->getValue('panda_equity/reports/search');
     }
@@ -680,16 +680,18 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         if ($type == 'country') {
             $selectColumns['country'] = new \Zend_Db_Expr("addr.country_id");
 
-            $countries = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue(
-                        'panda_equity/reports/country',
-                        ScopeInterface::SCOPE_WEBSITE
+            $countries = [];
+            if ($this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)) {
+                $countries = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue(
+                            'panda_equity/reports/country',
+                            ScopeInterface::SCOPE_WEBSITE
+                        )
                     )
-                )
-            );
-
+                );
+            }
             if ($countries) {
                 $select->where(' addr.country_id IN (?)', $countries);
             }
@@ -698,16 +700,19 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         if ($type == 'region') {
             $select->where(new \Zend_Db_Expr("LENGTH(addr.region)>0"));
 
-            $regions = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue(
-                        'panda_equity/reports/region',
-                        ScopeInterface::SCOPE_WEBSITE
-                    )
-                )
-            );
+            $regions = [];
 
+            if ($this->scopeConfig->getValue('panda_equity/reports/region', ScopeInterface::SCOPE_WEBSITE)) {
+                $regions = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue(
+                            'panda_equity/reports/region',
+                            ScopeInterface::SCOPE_WEBSITE
+                        )
+                    )
+                );
+            }
             if ($regions) {
                 $select->where(' addr.region_id IN (?)', $regions);
             }
@@ -887,15 +892,22 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($type == 'region') {
-            $regions = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue(
-                        'panda_equity/reports/region',
-                        ScopeInterface::SCOPE_WEBSITE
+            $regions = [];
+            if ($this->scopeConfig->getValue(
+                'panda_equity/reports/region',
+                ScopeInterface::SCOPE_WEBSITE
+            )
+            ) {
+                $regions = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue(
+                            'panda_equity/reports/region',
+                            ScopeInterface::SCOPE_WEBSITE
+                        )
                     )
-                )
-            );
+                );
+            }
 
             if ($regions) {
                 $loops = $regions;
@@ -917,12 +929,18 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($type == 'country') {
-            $countries = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)
-                )
-            );
+
+            $countries = [];
+
+            if ($this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)) {
+
+                $countries = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)
+                    )
+                );
+            }
 
             if ($countries) {
                 $loops = $countries;
@@ -1108,13 +1126,17 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($type == 'region') {
-            $regions = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue('panda_equity/reports/region', ScopeInterface::SCOPE_WEBSITE)
-                )
-            );
 
+            $regions = [];
+
+            if ($this->scopeConfig->getValue('panda_equity/reports/region', ScopeInterface::SCOPE_WEBSITE)) {
+                $regions = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue('panda_equity/reports/region', ScopeInterface::SCOPE_WEBSITE)
+                    )
+                );
+            }
             if ($regions) {
                 $loops = $regions;
             } else {
@@ -1126,12 +1148,17 @@ class Stats extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($type == 'country') {
-            $countries = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)
-                )
-            );
+
+            $countries = [];
+
+            if ($this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)) {
+                $countries = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)
+                    )
+                );
+            }
 
             if ($countries) {
                 $loops = $countries;

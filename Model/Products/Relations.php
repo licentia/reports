@@ -1093,16 +1093,20 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         $loops = [0];
 
         if ($type == 'region') {
-            $regions = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue(
-                        'panda_equity/reports/region',
-                        ScopeInterface::SCOPE_WEBSITE
-                    )
-                )
-            );
 
+            $regions = [];
+
+            if ($this->scopeConfig->getValue('panda_equity/reports/region', ScopeInterface::SCOPE_WEBSITE)) {
+                $regions = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue(
+                            'panda_equity/reports/region',
+                            ScopeInterface::SCOPE_WEBSITE
+                        )
+                    )
+                );
+            }
             if ($regions) {
                 $loops = $regions;
             } else {
@@ -1130,16 +1134,18 @@ class Relations extends \Magento\Framework\Model\AbstractModel
         }
 
         if ($type == 'country') {
-            $countries = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue(
-                        'panda_equity/reports/country',
-                        ScopeInterface::SCOPE_WEBSITE
+            $countries = [];
+            if ($this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)) {
+                $countries = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue(
+                            'panda_equity/reports/country',
+                            ScopeInterface::SCOPE_WEBSITE
+                        )
                     )
-                )
-            );
-
+                );
+            }
             if ($countries) {
                 $loops = $countries;
             } else {
@@ -2302,10 +2308,8 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
         $attributesLoop = [0];
         if ($attributes) {
-            $attributesConfig = $this->scopeConfig->getValue(
-                'panda_equity/reports/attributes',
-                ScopeInterface::SCOPE_WEBSITE
-            );
+            $attributesConfig = $this->scopeConfig->getValue('panda_equity/reports/attributes',
+                ScopeInterface::SCOPE_WEBSITE);
 
             if (!$attributesConfig) {
                 $attributesLoop = [];
@@ -2328,16 +2332,15 @@ class Relations extends \Magento\Framework\Model\AbstractModel
                     ['country' => 'country_id']
                 );
 
-                $countries = array_filter(
-                    explode(
-                        ',',
-                        $this->scopeConfig->getValue(
-                            'panda_equity/reports/country',
-                            ScopeInterface::SCOPE_WEBSITE
+                $countries = [];
+                if ($this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)) {
+                    $countries = array_filter(
+                        explode(
+                            ',',
+                            $this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)
                         )
-                    )
-                );
-
+                    );
+                }
                 if ($countries) {
                     $select->where(' ad.country_id IN (?)', $countries);
                 }
@@ -2356,16 +2359,18 @@ class Relations extends \Magento\Framework\Model\AbstractModel
 
                 $select->group('TRIM(region)');
 
-                $regions = array_filter(
-                    explode(
-                        ',',
-                        $this->scopeConfig->getValue(
-                            'panda_equity/reports/region',
-                            ScopeInterface::SCOPE_WEBSITE
-                        )
-                    )
-                );
+                $regions = [];
 
+                if ($this->scopeConfig->getValue('panda_equity/reports/region', ScopeInterface::SCOPE_WEBSITE)) {
+
+                    $regions = array_filter(
+                        explode(
+                            ',',
+                            $this->scopeConfig->getValue('panda_equity/reports/region', ScopeInterface::SCOPE_WEBSITE)
+                        )
+                    );
+
+                }
                 if ($regions) {
                     $select->where(' ad.region_id IN (?)', $regions);
                 }

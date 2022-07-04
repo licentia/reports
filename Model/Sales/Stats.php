@@ -735,15 +735,21 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                     if ($type == 'country') {
                         $selectColumns['country'] = new \Zend_Db_Expr("addr.country_id");
 
-                        $countries = array_filter(
-                            explode(
-                                ',',
-                                $this->scopeConfig->getValue(
-                                    'panda_equity/reports/country',
-                                    ScopeInterface::SCOPE_WEBSITE
+                        $countries = [];
+                        if ($this->scopeConfig->getValue(
+                            'panda_equity/reports/country',
+                            ScopeInterface::SCOPE_WEBSITE
+                        )) {
+                            $countries = array_filter(
+                                explode(
+                                    ',',
+                                    $this->scopeConfig->getValue(
+                                        'panda_equity/reports/country',
+                                        ScopeInterface::SCOPE_WEBSITE
+                                    )
                                 )
-                            )
-                        );
+                            );
+                        }
 
                         if ($countries) {
                             $select->where(' addr.country_id IN (?)', $countries);

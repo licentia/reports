@@ -573,16 +573,19 @@ class Orders extends \Magento\Framework\Model\AbstractModel
         if ($type == 'country') {
             $selectColumns['country'] = new \Zend_Db_Expr("addr.country_id");
 
-            $countries = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue(
-                        'panda_equity/reports/country',
-                        ScopeInterface::SCOPE_WEBSITE
-                    )
-                )
-            );
+            $countries = [];
 
+            if ($this->scopeConfig->getValue('panda_equity/reports/country', ScopeInterface::SCOPE_WEBSITE)) {
+                $countries = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue(
+                            'panda_equity/reports/country',
+                            ScopeInterface::SCOPE_WEBSITE
+                        )
+                    )
+                );
+            }
             if ($countries) {
                 $select->where(' addr.country_id IN (?)', $countries);
             }
@@ -592,15 +595,23 @@ class Orders extends \Magento\Framework\Model\AbstractModel
         if ($type == 'region') {
             $select->where(new \Zend_Db_Expr("LENGTH(addr.region)>0"));
 
-            $regions = array_filter(
-                explode(
-                    ',',
-                    $this->scopeConfig->getValue(
-                        'panda_equity/reports/region',
-                        ScopeInterface::SCOPE_WEBSITE
+            $regions = [];
+
+            if ($this->scopeConfig->getValue(
+                'panda_equity/reports/region',
+                ScopeInterface::SCOPE_WEBSITE
+            )) {
+
+                $regions = array_filter(
+                    explode(
+                        ',',
+                        $this->scopeConfig->getValue(
+                            'panda_equity/reports/region',
+                            ScopeInterface::SCOPE_WEBSITE
+                        )
                     )
-                )
-            );
+                );
+            }
 
             if ($regions) {
                 $select->where(' addr.region_id IN (?)', $regions);
