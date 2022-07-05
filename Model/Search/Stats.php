@@ -979,60 +979,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
                 $select->where('s.query!=?', $query);
 
-                if ($type == 'country') {
-                    $select->joinInner(['o' => $salesTable], 's.email = o.customer_email', []);
-                    $select->joinInner(
-                        ['ad' => $this->getTable('sales_order_address')],
-                        "o.entity_id = ad.parent_id AND ad.address_type = 'billing' ",
-                        ['country' => 'country_id']
-                    );
-
-                    $select->where('country_id=?', $loop);
-                }
-
-                if ($type == 'region') {
-                    $select->joinInner(['o' => $salesTable], 's.email = o.customer_email', []);
-                    $select->joinInner(
-                        ['ad' => $this->getTable('sales_order_address')],
-                        "o.entity_id = ad.parent_id AND ad.address_type = 'billing' AND LENGTH(region) > 1 ",
-                        ['region' => "CONCAT(region, ' - ', country_id)"]
-                    );
-                    $select->where("region_id =?", $loop);
-                }
-
-                if ($type == 'male' || $type == 'female') {
-                    $select->joinInner(
-                        ['k' => $this->getTable('panda_customers_kpis')],
-                        "s.email = k.email_meta AND (gender='$type' OR (gender IS NULL and predicted_gender='$type'))",
-                        []
-                    );
-                }
-
-                if ($type == 'age') {
-                    $select->joinInner(
-                        ['k' => $this->getTable('panda_customers_kpis')],
-                        's.email = k.email_meta AND age>=18',
-                        []
-                    );
-                    $newColumns = [
-                        'age' => new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())),
-                    ];
-
-                    $select->columns($newColumns);
-                    $select->where('age=?', $loop);
-                }
-
-                if ($segmentId) {
-                    $select->joinInner(
-                        ['p' => $this->getTable('panda_segments_records')],
-                        's.email = p.email',
-                        []
-                    );
-                }
-
-                if ($segmentId) {
-                    $select->where('p.segment_id=?', $segmentId);
-                }
+                $this->addConditionsToSelect($type, $select, $salesTable, $loop, $segmentId);
 
                 $select->where("s.email IN (SELECT email from $searchMetadata WHERE query=?) ", $query);
 
@@ -1187,69 +1134,13 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         foreach ($loops as $loop) {
             $select = $this->getConnection()->select();
-            $select->from(['s' => $searchMetadata], ['total' => 'COUNT(*)', 'query'])
-                   ->joinInner(['b' => $searchMetadata], 's.email = b.email', []);
 
-            if ($type == 'country') {
-                $select->joinInner(['o' => $salesTable], 's.email = o.customer_email', []);
-                $select->joinInner(
-                    ['ad' => $this->getTable('sales_order_address')],
-                    "o.entity_id = ad.parent_id AND ad.address_type = 'billing' ",
-                    ['country' => 'country_id']
-                );
+            $select->from(['s' => $searchMetadata], ['total' => 'COUNT(*)', 'query']);
 
-                $select->where('country_id=?', $loop);
-            }
-
-            if ($type == 'region') {
-                $select->joinInner(['o' => $salesTable], 's.email = o.customer_email', []);
-                $select->joinInner(
-                    ['ad' => $this->getTable('sales_order_address')],
-                    "o.entity_id = ad.parent_id AND ad.address_type = 'billing' AND LENGTH(region) > 1 ",
-                    ['region' => "CONCAT(region, ' - ', country_id)"]
-                );
-                $select->where("region_id =?", $loop);
-            }
-
-            if ($type == 'male' || $type == 'female') {
-                $select->joinInner(
-                    ['k' => $this->getTable('panda_customers_kpis')],
-                    "s.email = k.email_meta AND (gender='$type' OR (gender IS NULL and predicted_gender='$type'))",
-                    []
-                );
-            }
-
-            if ($type == 'age') {
-                $select->joinInner(
-                    ['k' => $this->getTable('panda_customers_kpis')],
-                    's.email = k.email_meta AND age>=18',
-                    []
-                );
-                $newColumns = [
-                    'age' => new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())),
-                ];
-
-                $select->columns($newColumns);
-
-                $select->where('age=?', $loop);
-            }
-
-            if ($segmentId) {
-                $select->joinInner(
-                    ['p' => $this->getTable('panda_segments_records')],
-                    's.email = p.email',
-                    []
-                );
-            }
-
-            if ($segmentId) {
-                $select->where('p.segment_id=?', $segmentId);
-            }
+            $this->addConditionsToSelect($type, $select, $salesTable, $loop, $segmentId);
 
             $select->group('s.query');
             $select->order('COUNT(*) DESC');
-
-            $select->columns(['query' => 'GROUP_CONCAT(DISTINCT(b.query))']);
 
             $result = $this->getConnection()->fetchAll($select);
 
@@ -1259,6 +1150,15 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
             foreach ($result as $item) {
                 $data = [];
+
+                $otherTerms = clone $select;
+                $otherTerms->reset('columns')
+                           ->joinInner(['b' => $searchMetadata], 's.email = b.email', [])
+                           ->columns(['query' => 'GROUP_CONCAT(DISTINCT(b.query))'])
+                           ->where('s.query=?', $item['query']);
+
+                $info['query'] = $this->getConnection()
+                                      ->fetchCol($otherTerms);
 
                 if ($segmentId) {
                     $data['segment_id'] = $segmentId;
@@ -1274,7 +1174,6 @@ class Stats extends \Magento\Framework\Model\AbstractModel
                 }
 
                 $data['total'] = $item['total'];
-                $info['query'] = str_getcsv($item['query']);
 
                 sort($info['query']);
                 $info['query'] = array_filter($info['query']);
@@ -1474,7 +1373,7 @@ class Stats extends \Magento\Framework\Model\AbstractModel
     /**
      * @param int $number
      */
-    public function dummyData($number = 2000)
+    public function dummyData(int $number = 2000)
     {
 
         $connection = $this->getResource()->getConnection();
@@ -1496,4 +1395,79 @@ class Stats extends \Magento\Framework\Model\AbstractModel
 
         }
     }
+
+    /**
+     * @param string                       $type
+     * @param \Magento\Framework\DB\Select $select
+     * @param string                       $salesTable
+     * @param mixed                        $loop
+     * @param bool                         $segmentId
+     *
+     * @return void
+     */
+    public function addConditionsToSelect(
+        string $type,
+        \Magento\Framework\DB\Select $select,
+        string $salesTable,
+        mixed $loop,
+        bool $segmentId
+    ): void {
+
+        if ($type == 'country') {
+            $select->joinInner(['o' => $salesTable], 's.email = o.customer_email', []);
+            $select->joinInner(
+                ['ad' => $this->getTable('sales_order_address')],
+                "o.entity_id = ad.parent_id AND ad.address_type = 'billing' ",
+                ['country' => 'country_id']
+            );
+
+            $select->where('country_id=?', $loop);
+        }
+
+        if ($type == 'region') {
+            $select->joinInner(['o' => $salesTable], 's.email = o.customer_email', []);
+            $select->joinInner(
+                ['ad' => $this->getTable('sales_order_address')],
+                "o.entity_id = ad.parent_id AND ad.address_type = 'billing' AND LENGTH(region) > 1 ",
+                ['region' => "CONCAT(region, ' - ', country_id)"]
+            );
+            $select->where("region_id =?", $loop);
+        }
+
+        if ($type == 'male' || $type == 'female') {
+            $select->joinInner(
+                ['k' => $this->getTable('panda_customers_kpis')],
+                "s.email = k.email_meta AND (gender='$type' OR (gender IS NULL and predicted_gender='$type'))",
+                []
+            );
+        }
+
+        if ($type == 'age') {
+            $select->joinInner(
+                ['k' => $this->getTable('panda_customers_kpis')],
+                's.email = k.email_meta AND age>=18',
+                []
+            );
+            $newColumns = [
+                'age' => new \Zend_Db_Expr(\Licentia\Reports\Helper\Data::getAgeMySQLGroup($this->getMySQLVersion())),
+            ];
+
+            $select->columns($newColumns);
+
+            $select->where('age=?', $loop);
+        }
+
+        if ($segmentId) {
+            $select->joinInner(
+                ['p' => $this->getTable('panda_segments_records')],
+                's.email = p.email',
+                []
+            );
+        }
+
+        if ($segmentId) {
+            $select->where('p.segment_id=?', $segmentId);
+        }
+    }
+
 }
