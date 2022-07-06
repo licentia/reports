@@ -249,38 +249,28 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         switch ($value) {
             case 'equity':
                 return __('Real-time update / manually update');
-                break;
             case 'sales':
                 return __('Daily update @3:40am');
-                break;
             case 'reorders':
                 return __('Daily update @2:20am');
-                break;
             case 'search_history':
                 return __('Daily update @4:20am');
-                break;
             case 'relations':
             case 'performance':
                 return __('Daily update for previous day @1:30am<br>FULL rebuild every monday @1:30am');
-                break;
             case 'recommendations':
                 return __('Daily update for previous day @1:30am<br>FULL rebuild every monday @6:00am');
-                break;
             case 'search_performance':
                 return __('FULL rebuild every monday @2:20am');
-                break;
             case 'venn':
                 return __('FULL rebuild every monday @3:20am');
-                break;
             case 'segments':
                 return __('Per-Segment option / manually update');
-                break;
 
             default:
                 return '';
         }
 
-        return $value;
     }
 
     /**
@@ -307,40 +297,28 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         switch ($value) {
             case 'equity':
                 return __('Customer equity values (number of orders, amounts, etc.)');
-                break;
             case 'sales':
                 return __('Sales analytics');
-                break;
             case 'reorders':
                 return __('Expected Reorders');
-                break;
             case 'search_history':
                 return __('Search History Data');
-                break;
             case 'relations':
                 return __('Product metadata for Recommendations');
-                break;
             case 'performance':
                 return __('Product Sales Performance');
-                break;
             case 'recommendations':
                 return __('Product Recommendation Metadata');
-                break;
             case 'search_performance':
                 return __('Search metadata');
-                break;
             case 'venn':
                 return __('Venn Analytics');
-                break;
             case 'segments':
                 return __('Customer Segments');
-                break;
-
             default:
                 return '';
         }
 
-        return $value;
     }
 
     /**

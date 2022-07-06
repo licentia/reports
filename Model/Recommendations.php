@@ -239,7 +239,6 @@ class Recommendations extends \Magento\Framework\Model\AbstractModel
 
         $this->request = $request;
         $this->storeManager = $storeManager;
-        $this->timezone = $timezone;
         $this->pandaHelper = $pandaHelper;
         $this->relationsFactory = $relationsFactory;
         $this->soldCollection = $soldCollection;

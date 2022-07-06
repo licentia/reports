@@ -76,7 +76,7 @@ class RebuildRecommendations
     }
 
     /**
-     * @return $this
+     * @return $this|void
      */
     public function yesterday()
     {

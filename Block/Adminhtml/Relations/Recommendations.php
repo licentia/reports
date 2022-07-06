@@ -79,6 +79,11 @@ class Recommendations extends \Magento\Backend\Block\Template
     protected $salesStats;
 
     /**
+     * @var
+     */
+    protected $_type;
+
+    /**
      * Recommendations constructor.
      *
      * @param \Licentia\Reports\Model\Sales\StatsFactory        $statsFactory

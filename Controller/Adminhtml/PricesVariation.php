@@ -65,6 +65,11 @@ class PricesVariation extends Action
     protected $fileFactory;
 
     /**
+     * @var \Licentia\Reports\Model\Sales\PricesVariationFactory
+     */
+    protected $pricesvariationFactory;
+
+    /**
      * PricesVariation constructor.
      *
      * @param Action\Context                                       $context
